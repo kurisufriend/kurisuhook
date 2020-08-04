@@ -99,6 +99,8 @@ namespace DriverProgram
                     if (File.Exists("image.png"))
                         ImGui.Image(Overlay.AddOrGetImagePointer("image.png"), new Vector2(120.5f, 329.5f));
 
+                    ImGui.ShowDemoWindow();
+
                     ImGui.End();
                 }
 

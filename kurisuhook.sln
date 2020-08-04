@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickableTransparentOverlay
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DriverProgram", "DriverProgram\DriverProgram.csproj", "{8F05BC9C-06E7-49F8-8417-E2E24F07726A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGui.NET", "ImGui.NET\ImGui.NET.csproj", "{B4DB1962-98FE-4B48-A5CE-4CE018AF6005}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{8F05BC9C-06E7-49F8-8417-E2E24F07726A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F05BC9C-06E7-49F8-8417-E2E24F07726A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F05BC9C-06E7-49F8-8417-E2E24F07726A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4DB1962-98FE-4B48-A5CE-4CE018AF6005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4DB1962-98FE-4B48-A5CE-4CE018AF6005}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4DB1962-98FE-4B48-A5CE-4CE018AF6005}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4DB1962-98FE-4B48-A5CE-4CE018AF6005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

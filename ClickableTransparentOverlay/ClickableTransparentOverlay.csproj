@@ -33,14 +33,11 @@
 
   <ItemGroup>
     <PackageReference Include="Coroutine" Version="2.0.0" />
+    <PackageReference Include="ImGui.NET" Version="1.75.0" />
     <PackageReference Include="Veldrid" Version="4.7.0" />
     <PackageReference Include="Veldrid.ImageSharp" Version="4.7.0" />
     <PackageReference Include="Veldrid.Sdl2" Version="4.7.0" />
     <PackageReference Include="Veldrid.StartupUtilities" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ImGui.NET\ImGui.NET.csproj" />
   </ItemGroup>
 
 </Project>
