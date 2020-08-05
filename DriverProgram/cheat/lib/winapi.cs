@@ -50,6 +50,7 @@ namespace recode.lib
 		}
         public enum VirtualKeys : Int32
         {
+            _ = 0x0,
             LeftButton = 0x01,
             RightButton = 0x02,
             Cancel = 0x03,
@@ -431,5 +432,7 @@ namespace recode.lib
             
             OEMClear = 0xFE
         }
+        public static string[] vkeyArr = Enum.GetNames(typeof(VirtualKeys));
+        public static Array vkeyArrVals = Enum.GetValues(typeof(VirtualKeys));
     }
 }

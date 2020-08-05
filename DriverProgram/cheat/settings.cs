@@ -4,6 +4,7 @@ using System.Text;
 using System.Numerics;
 using System.IO;
 using Newtonsoft.Json;
+using recode.lib;
 
 namespace recode
 {
@@ -17,17 +18,23 @@ namespace recode
 		public bool thirdperson;
 		// shoot
 		public bool triggerbot;
+		public Int32 triggerkey;
 		public bool rcs;
 		public float rcsintensityx;
 		public float rcsintensityy;
 		public bool rcssmoothing;
 		public float rcsmoothingintensity;
+		public bool rcsafter;
+		public bool aimbot;
+		public float aimbotsmoothing;
+		public bool aimbotrcs;
+		public Int32 aimkey;
+		public float aimbotfov;
 		// visuals
 		public bool glow;
 		public bool fullbloom;
 		public Vector4 glowcolor;
 		public Vector4 glowenemycolor;
-		public bool glowonlyvisible;
 		public bool radar;
 
 		public void save(string name)

@@ -104,7 +104,7 @@ namespace recode.sdk
 		{
 			get
 			{
-				return Memory.read<bool>(this.address + hazedumper.netvars.m_bSpottedByMask);
+				return (Memory.read<Int32>(this.address + hazedumper.netvars.m_bSpottedByMask) & (1 << G.playeraddress)) != 0;
 			}
 		}
 		public int modelindex
@@ -163,6 +163,22 @@ namespace recode.sdk
 			set
 			{
 				Memory.write<Vec3>(engine.clientstate + hazedumper.signatures.dwClientState_ViewAngles, value);
+			}
+		}
+		public Vec3 position
+		{
+			get
+			{
+				return Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecOrigin);
+			}
+		}
+		public Vec3 eyeposition
+		{
+			get
+			{
+				Vec3 pos = this.position;
+				pos.z += Memory.read<float>(this.address + hazedumper.netvars.m_vecViewOffset + 0x8);
+				return (pos);
 			}
 		}
 		public bool enemyincross

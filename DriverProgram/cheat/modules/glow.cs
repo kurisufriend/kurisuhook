@@ -16,8 +16,6 @@ namespace recode.modules
 			{
 				if (ent != null && ent.team != G.player.team)
 				{
-					if (G.settings.glowonlyvisible && !ent.visible)
-						return;
 					GlowStruct gs = new GlowStruct(G.settings.glowenemycolor);
 					Memory.write<GlowStruct>(client.glowobject + ent.glowindex * 0x38 + 0x4, gs);
 					Memory.write<bool>(client.glowobject + ent.glowindex * 0x38 + 0x24, true);

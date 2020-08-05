@@ -9,7 +9,11 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			if (winapi.GetAsyncKeyState((int)winapi.VirtualKeys.ExtraButton2) != 0 && G.player.enemyincross)
+			if (G.settings.triggerkey == 0 && G.player.enemyincross)
+			{
+				G.player.shoot();
+			}
+			else if (winapi.GetAsyncKeyState((int)winapi.vkeyArrVals.GetValue(G.settings.triggerkey)) != 0 && G.player.enemyincross)
 			{
 				G.player.shoot();
 			}

@@ -36,6 +36,7 @@ namespace DriverProgram
             if (Memory.setup("csgo") != 1) { debug.fatal("error during memory setup"); }
             if (utils.setup() != 1) { debug.fatal("error during utils setup"); }
             int playercache = utils.getLocalPlayer();
+            G.playeraddress = playercache;
             G.player = new LocalPlayer(playercache);
             G.settings = new settings();
 
@@ -68,6 +69,8 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
+                    ImGui.Text(G.settings.triggerkey.ToString());
+                    ImGui.Text(winapi.GetAsyncKeyState(G.settings.triggerkey).ToString());
                     ImGui.End();
                 }
 
@@ -82,9 +85,10 @@ namespace DriverProgram
                     }
 
                     Overlay.Close = !isRunning;
-                    ImGui.Checkbox("misc.", ref showmisc);
-                    ImGui.Checkbox("aim & trigger", ref showshoot);
+
+                    ImGui.Checkbox("assistance", ref showshoot);
                     ImGui.Checkbox("visuals", ref showvisuals);
+                    ImGui.Checkbox("misc.", ref showmisc);
                     ImGui.NewLine();
                     ImGui.InputText("config name", ref configname, 20);
                     ImGui.Text(configname);
@@ -92,14 +96,13 @@ namespace DriverProgram
                         G.settings.save(configname);
                     if (ImGui.Button("Load"))
                         G.settings.load(configname);
+
                     ImGui.End();
 
                     // kurisu pic
                     ImGui.Begin("");
                     if (File.Exists("image.png"))
                         ImGui.Image(Overlay.AddOrGetImagePointer("image.png"), new Vector2(120.5f, 329.5f));
-
-                    ImGui.ShowDemoWindow();
 
                     ImGui.End();
                 }
@@ -123,12 +126,20 @@ namespace DriverProgram
                 {
                     ImGui.Begin("pew pew", ImGuiWindowFlags.AlwaysAutoResize);
                     ImGui.Checkbox("triggerbot", ref G.settings.triggerbot);
+                    ImGui.Combo("triggerbot key", ref G.settings.triggerkey, winapi.vkeyArr, winapi.vkeyArr.Length);
                     ImGui.NewLine();
                     ImGui.Checkbox("recoil control", ref G.settings.rcs);
+                    ImGui.Checkbox("ignore first shot", ref G.settings.rcsafter);
                     ImGui.SliderFloat("rcs amount X", ref G.settings.rcsintensityx, 0, 1);
                     ImGui.SliderFloat("rcs amount Y", ref G.settings.rcsintensityy, 0, 1);
                     ImGui.Checkbox("rcs smoothing", ref G.settings.rcssmoothing);
                     ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("aimbot", ref G.settings.aimbot);
+                    ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
+                    ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
+                    ImGui.SliderFloat("aimbot smoothing amount", ref G.settings.aimbotsmoothing, 1.0f, 50.0f);
+                    ImGui.SliderFloat("aimbot fov", ref G.settings.aimbotfov, 0.0f, 180.0f);
                     ImGui.End();
                 }
                 // visuals window
@@ -138,7 +149,6 @@ namespace DriverProgram
                     ImGui.Checkbox("glowESP", ref G.settings.glow);
                     ImGui.Checkbox("fullbloom (fake chams)", ref G.settings.fullbloom);
                     ImGui.ColorEdit4("enemy color", ref G.settings.glowenemycolor);
-                    ImGui.Checkbox("glow only visible", ref G.settings.glowonlyvisible);
                     ImGui.NewLine();
                     ImGui.Checkbox("radarESP", ref G.settings.radar);
                     ImGui.End();
@@ -179,11 +189,17 @@ namespace DriverProgram
                     rcs.run();
                 }
 
+                if (G.settings.aimbot)
+                {
+                    aim.run();
+                }
+
                 thirdperson.run();
 
                 if (count % 200 == 0)
                 {
                     G.player = new LocalPlayer(utils.getLocalPlayer());
+                    G.playeraddress = utils.getLocalPlayer();
                     if (G.player.modelindex != 0)
                         G.normalhands = G.player.modelindex;
                 }

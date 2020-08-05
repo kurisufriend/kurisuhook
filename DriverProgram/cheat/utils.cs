@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using recode.lib;
 using recode.sdk;
+using System.Runtime.Serialization.Formatters;
 
 namespace recode
 {
@@ -37,6 +38,25 @@ namespace recode
 			}
 			return list.ToArray();
 		}
+		public static Entity getTarget()
+		{
+			float distance = Int32.MaxValue;
+			Entity best = new Entity(0);
+			foreach (Entity ent in utils.getEntityList())
+			{
+				if (ent.isenemy && ent.health > 0)
+				{
+					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.getbonepos(8))));
+					float curdist = utils.Vec3Distance(G.player.viewangles, ang);
+					if (curdist < distance)
+					{
+						distance = curdist;
+						best = ent;
+					}
+				}
+			}
+			return best;
+		}
 		public static Vector4 ColorToVector4(Color color)
 		{
 			return new Vector4(
@@ -53,6 +73,11 @@ namespace recode
 		public static Vec3 LinearInterp(Vec3 src, Vec3 dst, float factor)
 		{
 			return src + (dst - src) / factor;
+		}
+		public static Vec3 RCS(Vec3 src, float factor = 1f)
+		{
+			src -= G.player.aimpunch * (2.0f * factor);
+			return NormalizedAngle(src);
 		}
 		public static Vec3 CalcAngle(Vec3 src, Vec3 dst) // animesoftware
 		{

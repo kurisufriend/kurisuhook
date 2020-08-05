@@ -14,7 +14,7 @@ namespace recode.modules
 		public static void run()
 		{
 			Vec3 punchangles = new Vec3(G.player.aimpunch.x * (2.0f * G.settings.rcsintensityx), G.player.aimpunch.y * (2.0f * G.settings.rcsintensityy), G.player.aimpunch.z);
-			if (G.player.shotsfired > 1)
+			if (G.player.shotsfired > (G.settings.rcsafter ? 1 : 0))
 			{
 				if (!G.settings.rcssmoothing)
 					G.player.viewangles = (utils.NormalizedAngle(G.player.viewangles + cache - punchangles));
