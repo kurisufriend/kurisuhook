@@ -10,9 +10,16 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			if (winapi.GetAsyncKeyState((int)winapi.VirtualKeys.Space) != 0 && G.player.onGround && G.player.velocity != 0f)
+			while (true)
 			{
-				G.player.jump();
+				Thread.Sleep(1);
+				if (G.settings.bunnyhop)	
+				{
+					if (winapi.GetAsyncKeyState((int)winapi.VirtualKeys.Space) != 0 && G.player.onGround && G.player.velocity != 0f)
+					{
+						G.player.jump();
+					}
+				}
 			}
 		}
 	}

@@ -14,8 +14,10 @@ namespace recode
 		public bool bunnyhop;
 		public bool fovchanger;
 		public int fov;
-		public bool nohands;
-		public bool thirdperson;
+		public bool modelchanger;
+		public Int32 model;
+		public bool perspectivechanger;
+		public int observermode;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;

@@ -12,10 +12,7 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			if (G.settings.thirdperson && G.player.observermode != 1)
-				G.player.observermode = 1;
-			else if (!G.settings.thirdperson && G.player.observermode != 0)
-				G.player.observermode = 0;
+			G.player.observermode = G.settings.observermode;
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace DriverProgram
 {
     class Program
     {
-        public static bool isdebug = true;
+        public static bool isdebug = false;
 
         public static bool showall = true;
         public static bool showmain = true;
@@ -47,6 +47,12 @@ namespace DriverProgram
 
         private static IEnumerator<Wait> SubmitRenderLogic()
         {
+            Thread bhopthread = new Thread(new ThreadStart(bhop.run))
+            {
+                Priority = ThreadPriority.Highest,
+                IsBackground = true,
+            };
+            bhopthread.Start();
             while (true)
             {
                 yield return new Wait(Overlay.OnRender);
@@ -69,8 +75,6 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
-                    ImGui.Text(G.settings.triggerkey.ToString());
-                    ImGui.Text(winapi.GetAsyncKeyState(G.settings.triggerkey).ToString());
                     ImGui.End();
                 }
 
@@ -116,9 +120,11 @@ namespace DriverProgram
                     ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
                     ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
                     ImGui.NewLine();
-                    ImGui.Checkbox("nohands", ref G.settings.nohands);
+                    ImGui.Checkbox("model changer", ref G.settings.modelchanger);
+                    ImGui.Combo("model", ref G.settings.model, models.indexArr, models.indexArr.Length);
                     ImGui.NewLine();
-                    ImGui.Checkbox("thirdperson", ref G.settings.thirdperson);
+                    ImGui.Checkbox("perspective changer", ref G.settings.perspectivechanger);
+                    ImGui.SliderInt("perspective", ref G.settings.observermode, 0, 5);
                     ImGui.End();
                 }
                 // shooty window
@@ -154,11 +160,6 @@ namespace DriverProgram
                     ImGui.End();
                 }
 
-                if (G.settings.bunnyhop)
-                {
-                    bhop.run();
-                }
-
                 if (G.settings.fovchanger)
                 {
                     fov.run();
@@ -179,7 +180,7 @@ namespace DriverProgram
                     radar.run();
                 }
 
-                if (G.settings.nohands)
+                if (G.settings.modelchanger)
                 {
                     nohands.run();
                 }
@@ -194,7 +195,10 @@ namespace DriverProgram
                     aim.run();
                 }
 
-                thirdperson.run();
+                if (G.settings.perspectivechanger)
+                {
+                    thirdperson.run();
+                }
 
                 if (count % 200 == 0)
                 {

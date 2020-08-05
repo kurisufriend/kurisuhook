@@ -12,7 +12,7 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			G.player.modelindex = 0;
+			G.player.modelindex = (short)models.indexArrVals.GetValue(G.settings.model);
 		}
 	}
 }

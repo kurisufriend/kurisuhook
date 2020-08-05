@@ -100,6 +100,13 @@ namespace recode.sdk
 				return Memory.read<bool>(this.address + hazedumper.netvars.m_bIsScoped);
 			}
 		}
+		public bool dormant
+		{
+			get
+			{
+				return Memory.read<bool>(this.address + hazedumper.signatures.m_bDormant);
+			}
+		}
 		public bool visible
 		{
 			get
@@ -107,15 +114,15 @@ namespace recode.sdk
 				return (Memory.read<Int32>(this.address + hazedumper.netvars.m_bSpottedByMask) & (1 << G.playeraddress)) != 0;
 			}
 		}
-		public int modelindex
+		public short modelindex
 		{
 			get
 			{
-				return Memory.read<Int32>(this.address + offsets.n_ModelIndex);
+				return Memory.read<short>(this.address + offsets.n_ModelIndex);
 			}
 			set
 			{
-				Memory.write<Int32>(this.address + offsets.n_ModelIndex, value);
+				Memory.write<short>(this.address + offsets.n_ModelIndex, value);
 			}
 		}
 		public int observermode

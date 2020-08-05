@@ -44,7 +44,7 @@ namespace recode
 			Entity best = new Entity(0);
 			foreach (Entity ent in utils.getEntityList())
 			{
-				if (ent.isenemy && ent.health > 0)
+				if (ent.isenemy && ent.health > 0 && !ent.dormant)
 				{
 					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.getbonepos(8))));
 					float curdist = utils.Vec3Distance(G.player.viewangles, ang);

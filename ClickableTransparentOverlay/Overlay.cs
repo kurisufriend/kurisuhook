@@ -7,6 +7,9 @@ using Veldrid;
 using Veldrid.ImageSharp;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
+using ImGuiNET;
+
+using static ImGuiNET.ImGuiNative;
 
 namespace ClickableTransparentOverlay
 {
@@ -78,6 +81,9 @@ namespace ClickableTransparentOverlay
                 sec = (float)interval.TotalSeconds;
                 previous = current;
                 imController.Update(sec > 0 ? sec : 0.001f, snapshot, window.Handle);
+
+                InitStyle();
+
                 CoroutineHandler.Tick(interval.TotalSeconds);
                 if (Visible)
                 {
@@ -204,6 +210,34 @@ namespace ClickableTransparentOverlay
             graphicsDevice.Dispose();
             loadedImages.Clear();
             NativeMethods.SetConsoleWindow(true);
+        }
+        private static void InitStyle()
+        {
+            var style = ImGui.GetStyle();
+            style.WindowRounding = 0;
+            style.ChildRounding = 0;
+            style.ScrollbarRounding = 0;
+            style.WindowTitleAlign = new Vector2(.5f, .5f);
+            style.Colors[(int)ImGuiCol.Text] = new Vector4(1.00f, 1.00f, 1.00f, 1.00f);
+            style.Colors[(int)ImGuiCol.Text] = new Vector4(1.00f, 1.00f, 1.00f, 1.00f);
+            style.Colors[(int)ImGuiCol.WindowBg] = new Vector4(0.06f, 0.06f, 0.06f, 1.00f);
+            style.Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
+            style.Colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.19f, 0.19f, 0.19f, 1.00f);
+            style.Colors[(int)ImGuiCol.FrameBgActive] = new Vector4(0.47f, 0.47f, 0.47f, 1.00f);
+            style.Colors[(int)ImGuiCol.TitleBgActive] = new Vector4(0.52f, 0.09f, 0.09f, 1.00f);
+            style.Colors[(int)ImGuiCol.TitleBgCollapsed] = new Vector4(0.00f, 0.00f, 0.00f, 0.78f);
+            style.Colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.02f, 0.02f, 0.02f, 1.00f);
+            style.Colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.49f, 0.49f, 0.49f, 1.00f);
+            style.Colors[(int)ImGuiCol.CheckMark] = new Vector4(1.00f, 1.00f, 1.00f, 1.00f);
+            style.Colors[(int)ImGuiCol.SliderGrab] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
+            style.Colors[(int)ImGuiCol.Button] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
+            style.Colors[(int)ImGuiCol.ButtonHovered] = new Vector4(0.66f, 0.10f, 0.10f, 1.00f);
+            style.Colors[(int)ImGuiCol.ButtonActive] = new Vector4(0.52f, 0.09f, 0.09f, 1.00f);
+            style.Colors[(int)ImGuiCol.ResizeGrip] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
+            style.Colors[(int)ImGuiCol.ResizeGripHovered] = new Vector4(0.52f, 0.09f, 0.09f, 1.00f);
+            style.Colors[(int)ImGuiCol.Tab] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
+            style.Colors[(int)ImGuiCol.TabHovered] = new Vector4(0.52f, 0.09f, 0.09f, 1.00f);
+            style.Colors[(int)ImGuiCol.TabActive] = new Vector4(0.22f, 0.22f, 0.22f, 1.00f);
         }
     }
 }
