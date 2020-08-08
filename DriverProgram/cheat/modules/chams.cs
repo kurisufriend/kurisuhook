@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
 using recode;
@@ -7,15 +8,15 @@ using recode.sdk;
 
 namespace recode.modules
 {
-	class radar
+	public static class chams
 	{
 		public static void run()
 		{
 			foreach (Entity ent in G.entitylist)
 			{
-				if (ent.spotted == 0)
+				if (ent != null && ent.isenemy)
 				{
-					ent.spotted = 1;
+					ent.clrrender = new bytecolor(G.settings.chamscolor);
 				}
 			}
 		}

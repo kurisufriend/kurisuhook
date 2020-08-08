@@ -12,11 +12,11 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			foreach (Entity ent in utils.getEntityList())
+			foreach (Entity ent in G.entitylist)
 			{
 				if (ent != null && ent.team != G.player.team)
 				{
-					GlowStruct gs = new GlowStruct(G.settings.glowenemycolor);
+					GlowStruct gs = new GlowStruct(G.settings.glowcolor);
 					Memory.write<GlowStruct>(client.glowobject + ent.glowindex * 0x38 + 0x4, gs);
 					Memory.write<bool>(client.glowobject + ent.glowindex * 0x38 + 0x24, true);
 					Memory.write<bool>(client.glowobject + ent.glowindex * 0x38 + 0x2C, G.settings.fullbloom);

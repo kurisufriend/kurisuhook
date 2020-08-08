@@ -129,6 +129,16 @@ namespace recode.lib
             MemoryAPI.ReadProcessMemory(handle, (IntPtr)address, buffer, (UInt32)length, out nBytesRead);
             return getStructure<T>(buffer);
         }
+        public static string readstring(Int32 address, int size)
+        {
+            byte[] buffer = new byte[size];
+            IntPtr nBytesRead = IntPtr.Zero;
+            MemoryAPI.ReadProcessMemory(handle, (IntPtr)address, buffer, (UInt32)size, out nBytesRead);
+            string text =  Encoding.UTF8.GetString(buffer);
+            if (text.Contains('\0'))
+                text = text.Substring(0, text.IndexOf('\0'));
+            return text;
+        }
         public static void write<T>(int address, T data)
         {
             int sizeRead = Marshal.SizeOf(data);

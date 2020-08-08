@@ -18,6 +18,7 @@ namespace recode
 		public Int32 model;
 		public bool perspectivechanger;
 		public int observermode;
+		public bool speclist;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -36,22 +37,25 @@ namespace recode
 		public bool glow;
 		public bool fullbloom;
 		public Vector4 glowcolor;
-		public Vector4 glowenemycolor;
 		public bool radar;
-
+		public bool chams;
+		public Vector4 chamscolor;
+		// purple people eater
+		public bool knifechanger;
+		public Int32 knife;
 		public void save(string name)
 		{
 			if (name == "")
 				return;
-			var f = File.CreateText(name);
+			var f = File.CreateText(name + ".khook");
 			f.Write(JsonConvert.SerializeObject(G.settings));
 			f.Close();
 		}
 		public void load(string name)
 		{
-			if (!File.Exists(name))
+			if (!File.Exists(name + ".khook"))
 				return;
-			string source = File.ReadAllText(name);
+			string source = File.ReadAllText(name + ".khook");
 			G.settings =  JsonConvert.DeserializeObject<settings>(source);
 		}
 	}

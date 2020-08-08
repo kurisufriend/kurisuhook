@@ -10,9 +10,16 @@ namespace recode.sdk
 	public class Entity
 	{
 		private Int32 address;
+		private int id;
 		public Entity(Int32 _address)
 		{
 			address = _address;
+			for (int i = 0; i < 64; i++)
+			{
+				int obj = Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + i * 0x10);
+				if (obj == address)
+					id = i;
+			}
 		}
 		public static Entity fromid(int id)
 		{
@@ -123,6 +130,52 @@ namespace recode.sdk
 			set
 			{
 				Memory.write<short>(this.address + offsets.n_ModelIndex, value);
+			}
+		}
+		public int viewmodel
+		{
+			get
+			{
+				int id = Memory.read<Int32>(this.address + offsets.m_hViewModel) & 0xFFF;
+				return Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + (id - 1) * 0x10);
+			}
+		}
+		public int viewmodelmodelindex
+		{
+			get
+			{
+				return Memory.read<Int32>(this.viewmodel + offsets.n_ModelIndex);
+			}
+			set
+			{
+				Memory.write<Int32>(this.viewmodel + offsets.n_ModelIndex, value);
+			}
+		}
+		public Int32 curweapon
+		{
+			get
+			{
+				int id = Memory.read<Int32>(this.address + hazedumper.netvars.m_hActiveWeapon) & 0xFFF;
+				return Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + (id - 1) * 0x10);
+			}
+		}
+		public Int32 spectating
+		{
+			get
+			{
+				int id = Memory.read<Int32>(this.address + hazedumper.netvars.m_hObserverTarget) & 0xFFF;
+				return Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + (id - 1) * 0x10);
+			}
+		}
+		public bytecolor clrrender
+		{
+			get
+			{
+				return Memory.read<bytecolor>(this.address + hazedumper.netvars.m_clrRender);
+			}
+			set
+			{
+				Memory.write<bytecolor>(this.address + hazedumper.netvars.m_clrRender, value);
 			}
 		}
 		public int observermode

@@ -20,7 +20,7 @@ namespace recode.modules
 				return;
 			}
 			float distance = utils.Vec3Distance(G.player.viewangles, utils.NormalizedAngle(utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos(8)))));
-			if (distance < G.settings.aimbotfov)
+			if (distance < G.settings.aimbotfov && !target.dormant && target.health > 0)
 				G.player.viewangles = angtoaim;
 		}
 	}

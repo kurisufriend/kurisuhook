@@ -30,7 +30,7 @@ namespace recode
 			List<Entity> list = new List<Entity>();
 			for (int i = 0; i < 64; i++)
 			{
-				int obj = Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + i * 0x10);
+				int obj = Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + i * 0x10);	
 				if (obj != 0)
 				{
 					list.Add(new Entity(obj));
@@ -42,7 +42,7 @@ namespace recode
 		{
 			float distance = Int32.MaxValue;
 			Entity best = new Entity(0);
-			foreach (Entity ent in utils.getEntityList())
+			foreach (Entity ent in G.entitylist)
 			{
 				if (ent.isenemy && ent.health > 0 && !ent.dormant)
 				{
