@@ -19,6 +19,7 @@ namespace recode
 		public bool perspectivechanger;
 		public int observermode;
 		public bool speclist;
+		public bool watermark;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -33,6 +34,7 @@ namespace recode
 		public bool aimbotrcs;
 		public Int32 aimkey;
 		public float aimbotfov;
+		public Int32 aimbone;
 		// visuals
 		public bool glow;
 		public bool fullbloom;
@@ -40,6 +42,8 @@ namespace recode
 		public bool radar;
 		public bool chams;
 		public Vector4 chamscolor;
+		public bool colorhands;
+		public Vector4 handcolor;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;

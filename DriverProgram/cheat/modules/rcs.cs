@@ -8,7 +8,7 @@ using recode.sdk;
 
 namespace recode.modules
 {
-	class rcs
+	public static class rcs
 	{
 		public static Vec3 cache = new Vec3(0, 0, 0);
 		public static void run()

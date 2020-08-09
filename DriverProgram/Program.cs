@@ -65,12 +65,8 @@ namespace DriverProgram
 
         private static IEnumerator<Wait> SubmitRenderLogic()
         {
-            Thread thread = new Thread(new ThreadStart(threaded))
-            {
-                Priority = ThreadPriority.Highest,
-                IsBackground = true,
-            };
-            thread.Start();
+            InitThreads();
+
             while (true)
             {
                 yield return new Wait(Overlay.OnRender);
@@ -81,6 +77,7 @@ namespace DriverProgram
                     Environment.Exit(0);
 
                 // top left watermark
+                if (G.settings.watermark)
                 {
                     ImGui.SetNextWindowPos(new Vector2(0f, 0f));
                     ImGui.SetNextWindowBgAlpha(0.9f);
@@ -93,7 +90,6 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
-                    //ImGui.Text(new Weapon(G.player.curweapon).econid.ToString());
                     ImGui.End();
                 }
 
@@ -147,6 +143,8 @@ namespace DriverProgram
                     ImGui.SliderInt("perspective", ref G.settings.observermode, 0, 5);
                     ImGui.NewLine();
                     ImGui.Checkbox("spectator list", ref G.settings.speclist);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("watermark", ref G.settings.watermark);
                     ImGui.End();
                 }
                 // shooty window
@@ -164,6 +162,7 @@ namespace DriverProgram
                     ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
                     ImGui.NewLine();
                     ImGui.Checkbox("aimbot", ref G.settings.aimbot);
+                    ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
                     ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
                     ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
                     ImGui.SliderFloat("aimbot smoothing amount", ref G.settings.aimbotsmoothing, 1.0f, 50.0f);
@@ -182,6 +181,9 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("chams", ref G.settings.chams);
                     ImGui.ColorEdit4("chams color", ref G.settings.chamscolor);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("hand chams", ref G.settings.colorhands);
+                    ImGui.ColorEdit4("hand chams color", ref G.settings.handcolor);
                     ImGui.End();
                 }
                 // spec list
@@ -209,11 +211,6 @@ namespace DriverProgram
                     fov.run();
                 }
 
-                if (G.settings.triggerbot)
-                {
-                    trigger.run();
-                }
-
                 if (G.settings.glow)
                 {
                     glow.run();
@@ -234,11 +231,6 @@ namespace DriverProgram
                     rcs.run();
                 }
 
-                if (G.settings.aimbot)
-                {
-                    aim.run();
-                }
-
                 if (G.settings.perspectivechanger)
                 {
                     thirdperson.run();
@@ -247,6 +239,11 @@ namespace DriverProgram
                 if (G.settings.chams)
                 {
                     chams.run();
+                }
+                
+                if (G.settings.colorhands)
+                {
+                    colorhands.run();
                 }
 
                 if (count % 200 == 0)
@@ -263,16 +260,27 @@ namespace DriverProgram
                 count++;
             }
         }
-        public static void threaded()
+        public static void InitThreads()
         {
-            while (true)
-            {
-                Thread.Sleep(1);
-                if (G.settings.bunnyhop)
-                    bhop.run();
-                if (G.settings.knifechanger)
-                    knifechanger.run();
-            }
+            Thread bhopthread = new Thread(new ThreadStart(bhop.run));
+            bhopthread.Priority = ThreadPriority.Highest;
+            bhopthread.IsBackground = true;
+            bhopthread.Start();
+
+            Thread skinthread = new Thread(new ThreadStart(knifechanger.run));
+            skinthread.Priority = ThreadPriority.Highest;
+            skinthread.IsBackground = true;
+            skinthread.Start();
+
+            Thread aimthread = new Thread(new ThreadStart(aim.run));
+            aimthread.Priority = ThreadPriority.Highest;
+            aimthread.IsBackground = true;
+            aimthread.Start();
+
+            Thread triggerthread = new Thread(new ThreadStart(trigger.run));
+            triggerthread.Priority = ThreadPriority.Highest;
+            triggerthread.IsBackground = true;
+            triggerthread.Start();
         }
         private static IEnumerator<Wait> UpdateOverlaySample2()
         {

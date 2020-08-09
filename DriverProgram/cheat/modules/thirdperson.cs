@@ -8,7 +8,7 @@ using recode.sdk;
 
 namespace recode.modules
 {
-	class thirdperson
+	public static class thirdperson
 	{
 		public static void run()
 		{

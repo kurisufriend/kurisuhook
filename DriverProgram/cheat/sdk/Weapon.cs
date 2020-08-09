@@ -32,6 +32,17 @@ namespace recode.sdk
 				Memory.write<int>(address + offsets.m_iViewModelIndex, value);
 			}
 		}
+		public int entityquality
+		{
+			get
+			{
+				return Memory.read<int>(address + hazedumper.netvars.m_iEntityQuality);
+			}
+			set
+			{
+				Memory.write<int>(address + hazedumper.netvars.m_iEntityQuality, value);
+			}
+		}
 		public int econid
 		{
 			get

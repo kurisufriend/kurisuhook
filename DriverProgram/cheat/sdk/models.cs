@@ -28,5 +28,23 @@ namespace recode.sdk
 		}
 		public static string[] indexArr = Enum.GetNames(typeof(indices));
 		public static Array indexArrVals = Enum.GetValues(typeof(indices));
+		public enum bones : Int32
+		{
+			head = 8,
+			neck = 7,
+			pelvis = 0,
+			right_shoulder = 38,
+			right_elbow = 39,
+			right_hand = 40,
+			right_knee = 73,
+			right_foot = 74,
+			left_shoulder = 10,
+			left_elbow = 11,
+			left_hand = 12,
+			left_knee = 66,
+			left_foot = 67
+		}
+		public static string[] bonesArr = Enum.GetNames(typeof(bones));
+		public static Array bonesArrVals = Enum.GetValues(typeof(bones));
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using recode.lib;
 
 namespace recode.modules
@@ -9,13 +10,20 @@ namespace recode.modules
 	{
 		public static void run()
 		{
-			if (G.settings.triggerkey == 0 && G.player.enemyincross)
+			while (true)
 			{
-				G.player.shoot();
-			}
-			else if (winapi.GetAsyncKeyState((int)winapi.vkeyArrVals.GetValue(G.settings.triggerkey)) != 0 && G.player.enemyincross)
-			{
-				G.player.shoot();
+				Thread.Sleep(1);
+				if (G.settings.triggerbot)
+				{
+					if (G.settings.triggerkey == 0 && G.player.enemyincross)
+					{
+						G.player.shoot();
+					}
+					else if (winapi.GetAsyncKeyState((int)winapi.vkeyArrVals.GetValue(G.settings.triggerkey)) != 0 && G.player.enemyincross)
+					{
+						G.player.shoot();
+					}
+				}
 			}
 		}
 	}

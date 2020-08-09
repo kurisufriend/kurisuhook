@@ -46,7 +46,7 @@ namespace recode
 			{
 				if (ent.isenemy && ent.health > 0 && !ent.dormant)
 				{
-					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.getbonepos(8))));
+					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.getbonepos(G.settings.aimbone))));
 					float curdist = utils.Vec3Distance(G.player.viewangles, ang);
 					if (curdist < distance)
 					{

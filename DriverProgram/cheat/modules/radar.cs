@@ -7,7 +7,7 @@ using recode.sdk;
 
 namespace recode.modules
 {
-	class radar
+	public static class radar
 	{
 		public static void run()
 		{

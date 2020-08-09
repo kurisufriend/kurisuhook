@@ -5,7 +5,7 @@ using recode.lib;
 
 namespace recode.modules
 {
-	class fov
+	public static class fov
 	{
 		public static void run()
 		{

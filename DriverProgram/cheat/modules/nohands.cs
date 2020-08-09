@@ -8,7 +8,7 @@ using recode.sdk;
 
 namespace recode.modules
 {
-	class nohands
+	public static class nohands
 	{
 		public static void run()
 		{
