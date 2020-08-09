@@ -23,9 +23,9 @@ namespace recode.modules
 					Vec3 angtoaim = utils.NormalizedAngle(utils.LinearInterp(G.player.viewangles, utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos(G.settings.aimbone)), G.settings.aimbotrcs ? 1 : 0), (G.settings.aimbotsmoothing > 0) ? G.settings.aimbotsmoothing : 1));
 					if ((G.settings.aimkey != 0) && (winapi.GetAsyncKeyState((int)winapi.vkeyArrVals.GetValue(G.settings.aimkey)) == 0))
 					{
-						return;
+						continue;
 					}
-					float distance = utils.Vec3Distance(G.player.viewangles, utils.NormalizedAngle(utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos(8)))));
+					float distance = utils.Vec3Distance(G.player.viewangles, utils.NormalizedAngle(utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos(G.settings.aimbone)))));
 					if (distance < G.settings.aimbotfov && !target.dormant && target.health > 0)
 						G.player.viewangles = angtoaim;
 				}
