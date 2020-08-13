@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace recode.sdk
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct Vec3 // https://github.com/sagirilover/AnimeSoftware
     {
         public float x, y, z;

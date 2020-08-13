@@ -20,6 +20,8 @@ namespace recode
 		public int observermode;
 		public bool speclist;
 		public bool watermark;
+		public bool flashchanger;
+		public float maxflash;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -30,6 +32,7 @@ namespace recode
 		public float rcsmoothingintensity;
 		public bool rcsafter;
 		public bool aimbot;
+		public bool aimvisible;
 		public float aimbotsmoothing;
 		public bool aimbotrcs;
 		public Int32 aimkey;

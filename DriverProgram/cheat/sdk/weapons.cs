@@ -10,21 +10,28 @@ namespace recode.sdk
 		{
 			WEAPON_KNIFE = 42,
 			WEAPON_KNIFE_T = 59,
-			WEAPON_KNIFE_BAYONET = 500,   
-			WEAPON_KNIFE_FLIP = 505,       
-			WEAPON_KNIFE_GUT = 506,           
-			WEAPON_KNIFE_KARAMBIT = 507,    
-			WEAPON_KNIFE_M9_BAYONET = 508,   
-			WEAPON_KNIFE_TACTICAL = 509,    
-			WEAPON_KNIFE_FALCHION = 512,    
-			WEAPON_KNIFE_SURVIVAL_BOWIE = 514, 
-			WEAPON_KNIFE_BUTTERFLY = 515,      
-			WEAPON_KNIFE_PUSH = 516,      
-			WEAPON_KNIFE_URSUS = 519,          
-			WEAPON_KNIFE_GYPSY_JACKKNIFE = 520, 
-			WEAPON_KNIFE_STILETTO = 522,        
-			WEAPON_KNIFE_WIDOWMAKER = 523     
+			KNIFE_BAYONET = 500,
+			KNIFE_CSS = 503,
+			KNIFE_FLIP = 505,
+			KNIFE_GUT = 506,
+			KNIFE_KARAMBIT = 507,
+			KNIFE_M9_BAYONET = 508,
+			KNIFE_TACTICAL = 509,
+			KNIFE_FALCHION = 512,
+			KNIFE_BOWIE = 514,
+			KNIFE_BUTTERFLY = 515,
+			KNIFE_PUSH = 516,
+			KNIFE_CORD = 517,
+			KNIFE_CANIS = 518,
+			KNIFE_URSUS = 519,
+			KNIFE_GYPSY = 520,
+			KNIFE_OUTDOOR = 521,
+			KNIFE_STILETTO = 522,
+			KNIFE_WIDOWMAKER = 523,
+			KNIFE_SKELETON = 525
 		}
+		public static string[] knifidArr = Enum.GetNames(typeof(knifeDefinitionIndex));
+		public static Array knifeidArrVals = Enum.GetValues(typeof(knifeDefinitionIndex));
 		public enum knifestuff : Int32
 		{
 			bayonet = 0,

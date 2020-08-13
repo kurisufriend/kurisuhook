@@ -10,7 +10,7 @@ namespace recode.sdk
 	public class Entity
 	{
 		private Int32 address;
-		private int id;
+		public int id;
 		public Entity(Int32 _address)
 		{
 			address = _address;
@@ -47,7 +47,7 @@ namespace recode.sdk
 		{
 			get
 			{
-				return Memory.read<Int32>(this.address + hazedumper.netvars.m_iTeamNum);
+				return Memory.read<Int32>(this.address + hazedumper.netvars.m_fFlags);
 			}
 		}
 		public int tickbase
@@ -118,7 +118,7 @@ namespace recode.sdk
 		{
 			get
 			{
-				return (Memory.read<Int32>(this.address + hazedumper.netvars.m_bSpottedByMask) & (1 << G.playeraddress)) != 0;
+				return (Memory.read<Int32>(this.address + hazedumper.netvars.m_bSpottedByMask) & (1 << G.player.id)) != 0;
 			}
 		}
 		public short modelindex
@@ -138,6 +138,17 @@ namespace recode.sdk
 			{
 				int id = Memory.read<Int32>(this.address + offsets.m_hViewModel) & 0xFFF;
 				return Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + (id - 1) * 0x10);
+			}
+		}
+		public float maxflashalpha
+		{
+			get
+			{
+				return Memory.read<float>(this.address + hazedumper.netvars.m_flFlashMaxAlpha);
+			}
+			set
+			{
+				Memory.write<float>(this.address + hazedumper.netvars.m_flFlashMaxAlpha, value);
 			}
 		}
 		public int viewmodelmodelindex
@@ -274,8 +285,7 @@ namespace recode.sdk
 		{
 			get
 			{
-				Int32 fFlag = Memory.read<Int32>((this.address + hazedumper.netvars.m_fFlags));
-				return (fFlag == 263 || fFlag == 257) ? true : false;
+				return (this.flags == 263 || this.flags == 257) ? true : false;
 			}
 		}
 		public Vec3 getbonepos(int BoneID)

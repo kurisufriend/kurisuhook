@@ -90,6 +90,7 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
+                    ImGui.Text(G.player.maxflashalpha.ToString());
                     ImGui.End();
                 }
 
@@ -145,6 +146,9 @@ namespace DriverProgram
                     ImGui.Checkbox("spectator list", ref G.settings.speclist);
                     ImGui.NewLine();
                     ImGui.Checkbox("watermark", ref G.settings.watermark);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("reduce flash", ref G.settings.flashchanger);
+                    ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
                     ImGui.End();
                 }
                 // shooty window
@@ -162,6 +166,7 @@ namespace DriverProgram
                     ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
                     ImGui.NewLine();
                     ImGui.Checkbox("aimbot", ref G.settings.aimbot);
+                    ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
                     ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
                     ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
                     ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
@@ -244,6 +249,11 @@ namespace DriverProgram
                 if (G.settings.colorhands)
                 {
                     colorhands.run();
+                }
+                
+                if (G.settings.flashchanger)
+                {
+                    flash.run();
                 }
 
                 if (count % 200 == 0)

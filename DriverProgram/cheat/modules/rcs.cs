@@ -19,7 +19,7 @@ namespace recode.modules
 				if (!G.settings.rcssmoothing)
 					G.player.viewangles = (utils.NormalizedAngle(G.player.viewangles + cache - punchangles));
 				else
-					G.player.viewangles = (utils.NormalizedAngle( utils.LinearInterp (G.player.viewangles, G.player.viewangles + cache - punchangles, G.settings.rcsmoothingintensity) ));
+					G.player.viewangles = (utils.NormalizedAngle( utils.NonlinearInterp (G.player.viewangles, G.player.viewangles + cache - punchangles, G.settings.rcsmoothingintensity) ));
 			}
 			cache = punchangles;
 		}

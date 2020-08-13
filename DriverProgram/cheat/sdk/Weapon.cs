@@ -14,13 +14,6 @@ namespace recode.sdk
 		{
 			address = _address;
 		}
-		public short modelindex
-		{
-			get
-			{
-				return Memory.read<short>(address + offsets.n_ModelIndex);
-			}
-		}
 		public int viewmodelindex
 		{
 			get
@@ -30,6 +23,17 @@ namespace recode.sdk
 			set
 			{
 				Memory.write<int>(address + offsets.m_iViewModelIndex, value);
+			}
+		}
+		public int modelindex
+		{
+			get
+			{
+				return Memory.read<int>(address + offsets.n_ModelIndex);
+			}
+			set
+			{
+				Memory.write<int>(address + offsets.n_ModelIndex, value);
 			}
 		}
 		public int entityquality

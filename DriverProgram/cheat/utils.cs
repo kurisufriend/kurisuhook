@@ -72,6 +72,25 @@ namespace recode
 		}
 		public static Vec3 LinearInterp(Vec3 src, Vec3 dst, float factor)
 		{
+			float x1 = src.x;
+			float x2 = dst.x;
+			float y1 = src.y;
+			float y2 = dst.y;
+
+			if (src.Equals(dst)) { return src; };
+
+			if (x1 < x2)
+				src.x++;
+			if (x1 > x2)
+				src.x--;
+			if (y1 < y2)
+				src.y++;
+			if (y1 > y2)
+				src.y--;
+			return src;
+		}
+		public static Vec3 NonlinearInterp(Vec3 src, Vec3 dst, float factor)
+		{
 			return src + (dst - src) / factor;
 		}
 		public static Vec3 RCS(Vec3 src, float factor = 1f)

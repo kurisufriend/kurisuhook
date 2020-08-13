@@ -20,7 +20,9 @@ namespace recode.modules
 				if (G.settings.aimbot)
 				{
 					Entity target = utils.getTarget();
-					Vec3 angtoaim = utils.NormalizedAngle(utils.LinearInterp(G.player.viewangles, utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos((int)models.bonesArrVals.GetValue(G.settings.aimbone))), G.settings.aimbotrcs ? 1 : 0), (G.settings.aimbotsmoothing > 0) ? G.settings.aimbotsmoothing : 1));
+					if (G.settings.aimvisible && !target.visible)
+						continue;
+					Vec3 angtoaim = utils.NormalizedAngle(utils.NonlinearInterp(G.player.viewangles, utils.RCS(utils.CalcAngle(G.player.eyeposition, target.getbonepos((int)models.bonesArrVals.GetValue(G.settings.aimbone))), G.settings.aimbotrcs ? 1 : 0), (G.settings.aimbotsmoothing > 0) ? G.settings.aimbotsmoothing : 1));
 					if ((G.settings.aimkey != 0) && (winapi.GetAsyncKeyState((int)winapi.vkeyArrVals.GetValue(G.settings.aimkey)) == 0))
 					{
 						continue;
