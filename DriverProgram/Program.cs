@@ -156,7 +156,7 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("chat spammer", ref G.settings.spammer);
                     ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
-                    ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 1, 10);
+                    ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
                     ImGui.End();
                 }
                 // shooty window

@@ -17,7 +17,7 @@ namespace recode.modules
 				if (G.settings.spammer)
 				{
 					ClientCMD.Exec("say \"" + G.settings.spamstring + "\"");
-					Thread.Sleep(G.settings.spamdelay * 1000);
+					Thread.Sleep(G.settings.spamdelay * 500);
 				}
 			}
 		}

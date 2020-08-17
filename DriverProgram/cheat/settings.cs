@@ -24,7 +24,7 @@ namespace recode
 		public float maxflash;
 		public bool spammer;
 		public string spamstring = "";
-		public int spamdelay;
+		public int spamdelay = 1;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
