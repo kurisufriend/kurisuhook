@@ -35,7 +35,20 @@ namespace recode.lib
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 		static extern int GetWindowTextLength(IntPtr hWnd);
-		public static string GetCaptionOfActiveWindow()
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        internal static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, UInt32 flAllocationType, UInt32 flProtect);
+
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        public static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, int dwSize, uint dwFreeType);
+
+        [DllImport("kernel32.dll")]
+        internal static extern bool CloseHandle(IntPtr hProcess);
+
+        [DllImport("kernel32.dll")]
+        internal static extern UInt32 WaitForSingleObject(IntPtr hProcess, uint dwMilliseconds);
+
+        public static string GetCaptionOfActiveWindow()
 		{
 			var strTitle = string.Empty;
 			var handle = GetForegroundWindow();

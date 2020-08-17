@@ -16,6 +16,7 @@ namespace recode
 		{
 			G.engine = Memory.getModuleBA("engine.dll");
 			G.client = Memory.getModuleBA("client.dll");
+			G.vstdlib = Memory.getModuleBA("vstdlib.dll");
 			if (G.engine != 0 && G.client != 0)
 				return 1;
 			else
@@ -131,6 +132,39 @@ namespace recode
 				src.x = 0.0f;
 
 			return src;
+		}
+		public static float[] WorldToScreen(byte[] matrix, Entity entity, int width, int height, winapi.rect gameWindow, bool foot = true)
+		{
+			float m11 = BitConverter.ToSingle(matrix, 0), m12 = BitConverter.ToSingle(matrix, 16), m13 = BitConverter.ToSingle(matrix, 32), m14 = BitConverter.ToSingle(matrix, 48);
+			float m21 = BitConverter.ToSingle(matrix, 4), m22 = BitConverter.ToSingle(matrix, 20), m23 = BitConverter.ToSingle(matrix, 36), m24 = BitConverter.ToSingle(matrix, 25);
+			float m31 = BitConverter.ToSingle(matrix, 8), m32 = BitConverter.ToSingle(matrix, 24), m33 = BitConverter.ToSingle(matrix, 40), m34 = BitConverter.ToSingle(matrix, 56);
+			float m41 = BitConverter.ToSingle(matrix, 12), m42 = BitConverter.ToSingle(matrix, 28), m43 = BitConverter.ToSingle(matrix, 44), m44 = BitConverter.ToSingle(matrix, 60);
+
+			float zPos = entity.position.z;
+
+			//multiply vector against matrix
+			float screenX = (m11 * entity.position.x) + (m21 * entity.position.y) + (m31 * zPos) + m41;
+			float screenY = (m12 * entity.position.x) + (m22 * entity.position.y) + (m32 * zPos) + m42;
+			float screenW = (m14 * entity.position.x) + (m24 * entity.position.y) + (m34 * zPos) + m44;
+
+
+			//camera position (eye level/middle of screen)
+			float camX = width / 2f;
+			float camY = height / 2f;
+
+			//convert to homogeneous position
+			float x = camX + (camX * screenX / screenW);
+			float y = camY - (camY * screenY / screenW);
+			float[] screenPos = { x, y };
+
+			//check it is in the bounds to draw
+			if (screenW > 0.001f  //not behind us
+				&& gameWindow.left + x > gameWindow.left && gameWindow.left + x < gameWindow.right //not off the left or right of the window
+				&& gameWindow.top + y > gameWindow.top && gameWindow.top + y < gameWindow.bottom) //not off the top of bottom of the window
+			{
+				return screenPos;
+			}
+			return null;
 		}
 	}
 }

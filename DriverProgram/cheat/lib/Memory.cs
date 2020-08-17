@@ -9,9 +9,16 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
+using System.IO;
 
 namespace recode.lib
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct CharCodes
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 255)]
+        public int[] tab;
+    };
     class MemoryAPI
     {
         [DllImport("kernel32.dll")]
@@ -82,6 +89,18 @@ namespace recode.lib
             }
             return resultBA;
         }
+        public static int getModuleSize(string moduleName)
+        {
+            int resultBA = 0;
+            foreach (ProcessModule module in process.Modules)
+            {
+                if (module.ModuleName == moduleName)
+                {
+                    resultBA = (Int32)module.ModuleMemorySize;
+                }
+            }
+            return resultBA;
+        }
 
         public static int FindPattern(byte[] pattern, string mask, int moduleBase, int moduleSize) //animusoftawre
         {
@@ -109,12 +128,37 @@ namespace recode.lib
 
             return 0;
         }
+
+        public static string ReadText(IntPtr address)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int offset = 0;
+                byte read;
+                while ((read = ReadMemory(address + offset, 1)[0]) != 0)
+                {
+                    ms.WriteByte(read);
+                    offset++;
+                }
+                var data = ms.ToArray();
+                return Encoding.UTF8.GetString(data, 0, data.Length);
+            }
+        }
         public static T getStructure<T>(byte[] bytes)
         {
             var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
             var structure = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
             handle.Free();
             return structure;
+        }
+        public static byte[] ReadMemory(IntPtr address, int length)
+        {
+            byte[] data = new byte[length];
+            if (MemoryAPI.ReadProcessMemory(handle, address, data, (uint)data.Length, out IntPtr unused) == 0)
+            {
+                return null;
+            }
+            return data;
         }
 
         public static T read<T>(Int32 address)
@@ -155,5 +199,43 @@ namespace recode.lib
         {
             MemoryAPI.CloseHandle(handle);
         }
+    }
+
+    public class Allocator
+    {
+        public Dictionary<IntPtr, IntPtr> AllocatedSize = new Dictionary<IntPtr, IntPtr>();
+
+        public IntPtr AlloacNewPage(IntPtr size)
+        {
+            var Address = winapi.VirtualAllocEx(Memory.handle, IntPtr.Zero, (IntPtr)4096, (int)0x1000 | (int)0x2000, 0x40);
+
+            AllocatedSize.Add(Address, size);
+
+            return Address;
+        }
+
+        public void Free()
+        {
+            foreach (var key in AllocatedSize)
+                winapi.VirtualFreeEx(Memory.handle, key.Key, 4096, (int)0x1000 | (int)0x2000);
+        }
+
+        public IntPtr Alloc(int size)
+        {
+            for (int i = 0; i < AllocatedSize.Count; ++i)
+            {
+                var key = AllocatedSize.ElementAt(i).Key;
+                int value = (int)AllocatedSize[key] + size;
+                if (value < 4096)
+                {
+                    IntPtr CurrentAddres = IntPtr.Add(key, (int)AllocatedSize[key]);
+                    AllocatedSize[key] = new IntPtr(value);
+                    return CurrentAddres;
+                }
+            }
+
+            return AlloacNewPage(new IntPtr(size));
+        }
+
     }
 }

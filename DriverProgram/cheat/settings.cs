@@ -47,6 +47,11 @@ namespace recode
 		public Vector4 chamscolor;
 		public bool colorhands;
 		public Vector4 handcolor;
+		public bool viewmodelchanger;
+		public int viewmodelfov;
+		public int viewmodelx;
+		public int viewmodely;
+		public int viewmodelz;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;

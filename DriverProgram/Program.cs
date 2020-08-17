@@ -22,11 +22,16 @@ using System.Threading;
 using ClickableTransparentOverlay;
 using Coroutine;
 using ImGuiNET;
+using Veldrid;
+using Veldrid.ImageSharp;
+using Veldrid.Sdl2;
+using Veldrid.StartupUtilities;
 using kurisuhook.cheat.modules;
 using recode;
 using recode.lib;
 using recode.modules;
 using recode.sdk;
+using Vulkan;
 
 namespace DriverProgram
 {
@@ -90,7 +95,6 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
-                    ImGui.Text(G.player.maxflashalpha.ToString());
                     ImGui.End();
                 }
 
@@ -189,6 +193,12 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("hand chams", ref G.settings.colorhands);
                     ImGui.ColorEdit4("hand chams color", ref G.settings.handcolor);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("viewmodel changer", ref G.settings.viewmodelchanger);
+                    ImGui.SliderInt("viewmodel fov", ref G.settings.viewmodelfov, 0, 150);
+                    ImGui.SliderInt("viewmodel x", ref G.settings.viewmodelx, -50, 50);
+                    ImGui.SliderInt("viewmodel y", ref G.settings.viewmodely, -50, 50);
+                    ImGui.SliderInt("viewmodel z", ref G.settings.viewmodelz, -50, 50);
                     ImGui.End();
                 }
                 // spec list
@@ -211,6 +221,32 @@ namespace DriverProgram
                     ImGui.Combo("knife", ref G.settings.knife, weapons.knifeArr,weapons.knifeArr.Length);
                     ImGui.End();
                 }
+                /*{
+                    bool nigga = true;
+                    ImGui.SetNextWindowContentSize(ImGui.GetIO().DisplaySize);
+                    ImGui.SetNextWindowPos(new Vector2(0, 0));
+                    ImGui.Begin(
+                        "bg",
+                        ref nigga,
+                        ImGuiWindowFlags.NoInputs |
+                        ImGuiWindowFlags.NoBackground |
+                        ImGuiWindowFlags.NoBringToFrontOnFocus |
+                        ImGuiWindowFlags.NoCollapse |
+                        ImGuiWindowFlags.NoMove |
+                        ImGuiWindowFlags.NoScrollbar |
+                        ImGuiWindowFlags.NoSavedSettings |
+                        ImGuiWindowFlags.NoResize |
+                        ImGuiWindowFlags.NoTitleBar);
+                    var windowPtr = ImGui.GetWindowDrawList();
+                    windowPtr.AddText(new Vector2(10, 10), (uint)(((255 << 24) | (255 << 16) | (255 << 8) | 255) & 0xffffffffL), "kurisuhook");
+                    ImGui.End();
+                }*/
+
+                if (count % 200 == 0)
+                {
+
+                }
+
                 if (G.settings.fovchanger)
                 {
                     fov.run();
@@ -291,6 +327,11 @@ namespace DriverProgram
             triggerthread.Priority = ThreadPriority.Highest;
             triggerthread.IsBackground = true;
             triggerthread.Start();
+            
+            Thread viewmodelthread = new Thread(new ThreadStart(viewmodel.run));
+            viewmodelthread.Priority = ThreadPriority.Highest;
+            viewmodelthread.IsBackground = true;
+            viewmodelthread.Start();
         }
         private static IEnumerator<Wait> UpdateOverlaySample2()
         {
