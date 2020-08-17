@@ -22,6 +22,9 @@ namespace recode
 		public bool watermark;
 		public bool flashchanger;
 		public float maxflash;
+		public bool spammer;
+		public string spamstring = "";
+		public int spamdelay;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;

@@ -153,6 +153,10 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("reduce flash", ref G.settings.flashchanger);
                     ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("chat spammer", ref G.settings.spammer);
+                    ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
+                    ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 1, 10);
                     ImGui.End();
                 }
                 // shooty window
@@ -242,11 +246,6 @@ namespace DriverProgram
                     ImGui.End();
                 }*/
 
-                if (count % 200 == 0)
-                {
-
-                }
-
                 if (G.settings.fovchanger)
                 {
                     fov.run();
@@ -332,6 +331,11 @@ namespace DriverProgram
             viewmodelthread.Priority = ThreadPriority.Highest;
             viewmodelthread.IsBackground = true;
             viewmodelthread.Start();
+            
+            Thread spammerthread = new Thread(new ThreadStart(spammer.run));
+            spammerthread.Priority = ThreadPriority.Highest;
+            spammerthread.IsBackground = true;
+            spammerthread.Start();
         }
         private static IEnumerator<Wait> UpdateOverlaySample2()
         {
