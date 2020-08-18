@@ -109,7 +109,6 @@ namespace DriverProgram
                     }
 
                     Overlay.Close = !isRunning;
-
                     if (ImGui.TreeNode("Cheat"))
                     {
                         ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags.None;
@@ -119,14 +118,14 @@ namespace DriverProgram
                             {
                                 ImGui.Checkbox("triggerbot", ref G.settings.triggerbot);
                                 ImGui.Combo("triggerbot key", ref G.settings.triggerkey, winapi.vkeyArr, winapi.vkeyArr.Length);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("recoil control", ref G.settings.rcs);
                                 ImGui.Checkbox("ignore first shot", ref G.settings.rcsafter);
                                 ImGui.SliderFloat("rcs amount X", ref G.settings.rcsintensityx, 0, 1);
                                 ImGui.SliderFloat("rcs amount Y", ref G.settings.rcsintensityy, 0, 1);
                                 ImGui.Checkbox("rcs smoothing", ref G.settings.rcssmoothing);
                                 ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("aimbot", ref G.settings.aimbot);
                                 ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
                                 ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
@@ -141,15 +140,15 @@ namespace DriverProgram
                                 ImGui.Checkbox("glowESP", ref G.settings.glow);
                                 ImGui.Checkbox("fullbloom (fake chams)", ref G.settings.fullbloom);
                                 ImGui.ColorEdit4("glow color", ref G.settings.glowcolor);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("radarESP", ref G.settings.radar);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("chams", ref G.settings.chams);
                                 ImGui.ColorEdit4("chams color", ref G.settings.chamscolor);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("hand chams", ref G.settings.colorhands);
                                 ImGui.ColorEdit4("hand chams color", ref G.settings.handcolor);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("viewmodel changer", ref G.settings.viewmodelchanger);
                                 ImGui.SliderInt("viewmodel fov", ref G.settings.viewmodelfov, 0, 150);
                                 ImGui.SliderInt("viewmodel x", ref G.settings.viewmodelx, -50, 50);
@@ -160,23 +159,23 @@ namespace DriverProgram
                             if (ImGui.BeginTabItem("Misc"))
                             {
                                 ImGui.Checkbox("bunnyhop", ref G.settings.bunnyhop);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
                                 ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("model changer", ref G.settings.modelchanger);
                                 ImGui.Combo("model", ref G.settings.model, models.indexArr, models.indexArr.Length);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("perspective changer", ref G.settings.perspectivechanger);
                                 ImGui.SliderInt("perspective", ref G.settings.observermode, 0, 5);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("spectator list", ref G.settings.speclist);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("watermark", ref G.settings.watermark);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("reduce flash", ref G.settings.flashchanger);
                                 ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
-                                ImGui.NewLine();
+                                ImGui.Separator();
                                 ImGui.Checkbox("chat spammer", ref G.settings.spammer);
                                 ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
                                 ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
@@ -190,7 +189,7 @@ namespace DriverProgram
                             }
                             if (ImGui.BeginTabItem("Config"))
                             {
-                                                        ImGui.NewLine();
+                                                        ImGui.Separator();
                     ImGui.InputText("config name", ref configname, 20);
                     ImGui.Text(configname);
                     if (ImGui.Button("Save"))

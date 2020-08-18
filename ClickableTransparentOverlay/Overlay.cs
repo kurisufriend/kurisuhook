@@ -228,6 +228,7 @@ namespace ClickableTransparentOverlay
             style.Colors[(int)ImGuiCol.TitleBgCollapsed] = new Vector4(0.00f, 0.00f, 0.00f, 0.78f);
             style.Colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.02f, 0.02f, 0.02f, 1.00f);
             style.Colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.49f, 0.49f, 0.49f, 1.00f);
+            style.Colors[(int)ImGuiCol.Separator] = new Vector4(0.49f, 0.49f, 0.49f, 1.00f);
             style.Colors[(int)ImGuiCol.CheckMark] = new Vector4(1.00f, 1.00f, 1.00f, 1.00f);
             style.Colors[(int)ImGuiCol.SliderGrab] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
             style.Colors[(int)ImGuiCol.Button] = new Vector4(0.50f, 0.02f, 0.02f, 1.00f);
