@@ -51,7 +51,6 @@ namespace DriverProgram
         public static string configname = "";
 
         private static Random randomGen = new Random();
-        private static Vector2[] circleCenters = new Vector2[200];
 
         static void Main()
         {
@@ -63,7 +62,6 @@ namespace DriverProgram
             G.settings = new settings();
             G.entitylist = utils.getEntityList();
 
-            CoroutineHandler.Start(UpdateOverlaySample2());
             CoroutineHandler.Start(SubmitRenderLogic());
             Overlay.RunInfiniteLoop();
         }
@@ -157,6 +155,9 @@ namespace DriverProgram
                     ImGui.Checkbox("chat spammer", ref G.settings.spammer);
                     ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
                     ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("hitsounds", ref G.settings.hitsounds);
+                    ImGui.Combo("sound", ref G.settings.hitsound, hits.soundsArr, hits.soundsArr.Length);
                     ImGui.End();
                 }
                 // shooty window
@@ -203,6 +204,7 @@ namespace DriverProgram
                     ImGui.SliderInt("viewmodel x", ref G.settings.viewmodelx, -50, 50);
                     ImGui.SliderInt("viewmodel y", ref G.settings.viewmodely, -50, 50);
                     ImGui.SliderInt("viewmodel z", ref G.settings.viewmodelz, -50, 50);
+                    ImGui.Checkbox("2gunz", ref G.settings.flipviewmodel);
                     ImGui.End();
                 }
                 // spec list
@@ -225,7 +227,7 @@ namespace DriverProgram
                     ImGui.Combo("knife", ref G.settings.knife, weapons.knifeArr,weapons.knifeArr.Length);
                     ImGui.End();
                 }
-                /*{
+                {
                     bool nigga = true;
                     ImGui.SetNextWindowContentSize(ImGui.GetIO().DisplaySize);
                     ImGui.SetNextWindowPos(new Vector2(0, 0));
@@ -242,9 +244,9 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize |
                         ImGuiWindowFlags.NoTitleBar);
                     var windowPtr = ImGui.GetWindowDrawList();
-                    windowPtr.AddText(new Vector2(10, 10), (uint)(((255 << 24) | (255 << 16) | (255 << 8) | 255) & 0xffffffffL), "kurisuhook");
+                    windowPtr.AddText(new Vector2(randomGen.Next(10, 15), randomGen.Next(10, 15)), (uint)(((randomGen.Next(1, 255) << 24) | (randomGen.Next(1, 255) << 16) | (randomGen.Next(1, 255) << 8) | 255) & 0xffffffffL), "kurisuhook");
                     ImGui.End();
-                }*/
+                }
 
                 if (G.settings.fovchanger)
                 {
@@ -289,6 +291,11 @@ namespace DriverProgram
                 if (G.settings.flashchanger)
                 {
                     flash.run();
+                }
+
+                if (G.settings.hitsounds)
+                {
+                    hits.run();
                 }
 
                 if (count % 200 == 0)
@@ -336,18 +343,6 @@ namespace DriverProgram
             spammerthread.Priority = ThreadPriority.Highest;
             spammerthread.IsBackground = true;
             spammerthread.Start();
-        }
-        private static IEnumerator<Wait> UpdateOverlaySample2()
-        {
-            while (true)
-            {
-                yield return new Wait(1);
-                for (int i = 0; i < circleCenters.Length; i++)
-                {
-                    circleCenters[i].X = randomGen.Next(0, 2560);
-                    circleCenters[i].Y = randomGen.Next(0, 1440);
-                }
-            }
         }
     }
 }

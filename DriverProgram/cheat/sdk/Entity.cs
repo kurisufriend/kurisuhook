@@ -288,6 +288,13 @@ namespace recode.sdk
 				return (this.flags == 263 || this.flags == 257) ? true : false;
 			}
 		}
+		public int totalhits
+		{
+			get
+			{
+				return Memory.read<int>(this.address + offsets.m_totalHitsOnServer);
+			}
+		}
 		public Vec3 getbonepos(int BoneID)
 		{
 			int BoneMatrix = Memory.read<Int32>(this.address + hazedumper.netvars.m_dwBoneMatrix);

@@ -13,6 +13,7 @@ namespace recode.modules
         public static int curvmx;
         public static int curvmy;
         public static int curvmz;
+        public static bool alt;
         public static void run()
 		{
 			while (true)
@@ -47,6 +48,11 @@ namespace recode.modules
                         vmz.ClearCallbacks();
                         ClientCMD.Exec("viewmodel_offset_z " + G.settings.viewmodelz.ToString());
                         curvmx = G.settings.viewmodelz;
+                    }
+                    if (G.settings.flipviewmodel)
+                    {
+                        ClientCMD.Exec(alt ? "cl_righthand 1" : "cl_righthand 0");
+                        alt = !alt;
                     }
                 }
 			}

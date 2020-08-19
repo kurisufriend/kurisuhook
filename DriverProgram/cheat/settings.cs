@@ -25,6 +25,8 @@ namespace recode
 		public bool spammer;
 		public string spamstring = "";
 		public int spamdelay = 1;
+		public bool hitsounds;
+		public Int32 hitsound;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -55,6 +57,7 @@ namespace recode
 		public int viewmodelx;
 		public int viewmodely;
 		public int viewmodelz;
+		public bool flipviewmodel;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;
