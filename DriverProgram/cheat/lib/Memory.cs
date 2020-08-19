@@ -169,8 +169,7 @@ namespace recode.lib
                 length = 1;
 
             byte[] buffer = new byte[length];
-            IntPtr nBytesRead = IntPtr.Zero;
-            MemoryAPI.ReadProcessMemory(handle, (IntPtr)address, buffer, (UInt32)length, out nBytesRead);
+            MemoryAPI.ReadProcessMemory(handle, (IntPtr)address, buffer, (UInt32)length, out _);
             return getStructure<T>(buffer);
         }
         public static string readstring(Int32 address, int size)
@@ -192,8 +191,7 @@ namespace recode.lib
             Marshal.Copy(ptr, buffer, 0, sizeRead);
             Marshal.FreeHGlobal(ptr);
 
-            IntPtr readBytes = IntPtr.Zero;
-            MemoryAPI.WriteProcessMemory(handle, (IntPtr)address, buffer, (uint)sizeRead, out readBytes);
+            MemoryAPI.WriteProcessMemory(handle, (IntPtr)address, buffer, (uint)sizeRead, out _);
         }
         public static void close()
         {

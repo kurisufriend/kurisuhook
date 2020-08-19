@@ -225,6 +225,17 @@ namespace recode.sdk
 				Memory.write<Vec3>(this.address + hazedumper.netvars.m_aimPunchAngle, value);
 			}
 		}
+		public Vec3 viewpunch
+		{
+			get
+			{
+				return Memory.read<Vec3>(this.address + hazedumper.netvars.m_viewPunchAngle);
+			}
+			set
+			{
+				Memory.write<Vec3>(this.address + hazedumper.netvars.m_viewPunchAngle, value);
+			}
+		}
 		public Vec3 viewangles
 		{
 			get

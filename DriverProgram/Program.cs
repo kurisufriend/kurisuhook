@@ -32,6 +32,8 @@ using recode.lib;
 using recode.modules;
 using recode.sdk;
 using Vulkan;
+using Vulkan.Xlib;
+using System.ComponentModel;
 
 namespace DriverProgram
 {
@@ -49,6 +51,7 @@ namespace DriverProgram
         public static int count = 0;
 
         public static string configname = "";
+        public static bool oldcross = false;
 
         private static Random randomGen = new Random();
 
@@ -69,6 +72,7 @@ namespace DriverProgram
         private static IEnumerator<Wait> SubmitRenderLogic()
         {
             InitThreads();
+            ClientCMD.Exec("crosshair 1");
 
             while (true)
             {
@@ -77,7 +81,10 @@ namespace DriverProgram
                 if (NativeMethods.IsKeyPressedBetter((int)winapi.VirtualKeys.Insert))
                     showall = !showall;
                 if (NativeMethods.IsKeyPressedBetter((int)winapi.VirtualKeys.End))
+                {
+                    ClientCMD.Exec("crosshair 1");
                     Environment.Exit(0);
+                }
 
                 // top left watermark
                 if (G.settings.watermark)
@@ -205,6 +212,9 @@ namespace DriverProgram
                     ImGui.SliderInt("viewmodel y", ref G.settings.viewmodely, -50, 50);
                     ImGui.SliderInt("viewmodel z", ref G.settings.viewmodelz, -50, 50);
                     ImGui.Checkbox("2gunz", ref G.settings.flipviewmodel);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("crosshair", ref G.settings.crosshair);
+                    ImGui.Checkbox("recoil crosshair", ref G.settings.recoilcrosshair);
                     ImGui.End();
                 }
                 // spec list
@@ -244,7 +254,20 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize |
                         ImGuiWindowFlags.NoTitleBar);
                     var windowPtr = ImGui.GetWindowDrawList();
-                    windowPtr.AddText(new Vector2(randomGen.Next(10, 15), randomGen.Next(10, 15)), (uint)(((randomGen.Next(1, 255) << 24) | (randomGen.Next(1, 255) << 16) | (randomGen.Next(1, 255) << 8) | 255) & 0xffffffffL), "kurisuhook");
+                    //windowPtr.AddText(new Vector2(randomGen.Next(10, 15), randomGen.Next(10, 15)), (uint)(((randomGen.Next(1, 255) << 24) | (randomGen.Next(1, 255) << 16) | (randomGen.Next(1, 255) << 8) | 255) & 0xffffffffL), "kurisuhook");
+                    Vector2 screen = new Vector2(1920, 1080);
+                    uint white = (uint)(((randomGen.Next(255, 255) << 24) | (randomGen.Next(255, 255) << 16) | (randomGen.Next(255, 255) << 8) | 255) & 0xffffffffL);
+                    Vector2 middle = G.settings.recoilcrosshair ? (new Vector2((screen.X / 2 - ((1920 / 95f) * (float)G.player.aimpunch.y)), (screen.Y / 2 + ((1080 / 95f) * (float)G.player.aimpunch.x)))) : (new Vector2(screen.X / 2, screen.Y / 2));
+                    if (G.settings.crosshair)
+                    {
+                        windowPtr.AddLine(new Vector2(middle.X, middle.Y - 5), new Vector2(middle.X, middle.Y + 6), white);
+                        windowPtr.AddLine(new Vector2(middle.X - 5, middle.Y), new Vector2(middle.X + 6, middle.Y), white);
+                    }
+                    if (G.settings.crosshair != oldcross)
+                    {
+                        ClientCMD.Exec(G.settings.crosshair ? "crosshair 0" : "crosshair 1");
+                        oldcross = G.settings.crosshair;
+                    }
                     ImGui.End();
                 }
 

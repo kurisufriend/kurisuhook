@@ -58,6 +58,8 @@ namespace recode
 		public int viewmodely;
 		public int viewmodelz;
 		public bool flipviewmodel;
+		public bool crosshair;
+		public bool recoilcrosshair;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;

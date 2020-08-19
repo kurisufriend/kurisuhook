@@ -11,6 +11,7 @@ using System.IO;
 using recode;
 using recode.lib;
 using recode.sdk;
+using System.Reflection;
 
 namespace recode.sdk
 {
@@ -68,7 +69,5 @@ namespace recode.sdk
             }
             return (int)IntPtr.Zero;
         }
-
-
     }
 }
