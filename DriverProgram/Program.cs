@@ -41,16 +41,17 @@ namespace DriverProgram
 
         public static bool showall = true;
         public static bool showmain = true;
-        public static bool showmisc = false;
-        public static bool showshoot = false;
-        public static bool showvisuals = false;
-        public static bool showskins = false;
+        public static bool showmisc = true;
+        public static bool showshoot = true;
+        public static bool showvisuals = true;
+        public static bool showskins = true;
 
         public static int count = 0;
 
         public static string configname = "";
 
         private static Random randomGen = new Random();
+        private static Vector2[] circleCenters = new Vector2[200];
 
         static void Main()
         {
@@ -62,6 +63,7 @@ namespace DriverProgram
             G.settings = new settings();
             G.entitylist = utils.getEntityList();
 
+            CoroutineHandler.Start(UpdateOverlaySample2());
             CoroutineHandler.Start(SubmitRenderLogic());
             Overlay.RunInfiniteLoop();
         }
@@ -99,114 +101,128 @@ namespace DriverProgram
                 if (showmain && showall)
                 {
                     bool isRunning = true;
-                    if (!ImGui.Begin("welcome to kurisuhook!", ref isRunning, ImGuiWindowFlags.AlwaysAutoResize))
+                    if (!ImGui.Begin("welcome to kurisuhook!", ref isRunning, ImGuiWindowFlags.None))
                     {
                         Overlay.Close = !isRunning;
                         ImGui.End();
                         continue;
                     }
 
-                    Overlay.Close = !isRunning;
+                    {
+                        ImGui.SetNextWindowPos(new Vector2(0f, 0f));
+                        ImGui.SetNextWindowBgAlpha(0.9f);
+                        ImGui.Begin(
+                            "kurisuhook",
+                            ImGuiWindowFlags.NoInputs |
+                            ImGuiWindowFlags.NoCollapse |
+                            ImGuiWindowFlags.NoTitleBar |
+                            ImGuiWindowFlags.AlwaysAutoResize |
+                            ImGuiWindowFlags.NoResize);
 
-                    ImGui.Checkbox("assistance", ref showshoot);
-                    ImGui.Checkbox("visuals", ref showvisuals);
-                    ImGui.Checkbox("poorfag zone", ref showskins);
-                    ImGui.Checkbox("misc.", ref showmisc);
-                    ImGui.NewLine();
+                        ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
+                        ImGui.End();
+                    }
+
+                    Overlay.Close = !isRunning;
+                    if (ImGui.TreeNode("Cheat"))
+                    {
+                        ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags.None;
+                        if (ImGui.BeginTabBar("MyTabBar", tab_bar_flags))
+                        {
+                            if (ImGui.BeginTabItem("Pew"))
+                            {
+                                ImGui.Checkbox("triggerbot", ref G.settings.triggerbot);
+                                ImGui.Combo("triggerbot key", ref G.settings.triggerkey, winapi.vkeyArr, winapi.vkeyArr.Length);
+                                ImGui.Separator();
+                                ImGui.Checkbox("recoil control", ref G.settings.rcs);
+                                ImGui.Checkbox("ignore first shot", ref G.settings.rcsafter);
+                                ImGui.SliderFloat("rcs amount X", ref G.settings.rcsintensityx, 0, 1);
+                                ImGui.SliderFloat("rcs amount Y", ref G.settings.rcsintensityy, 0, 1);
+                                ImGui.Checkbox("rcs smoothing", ref G.settings.rcssmoothing);
+                                ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
+                                ImGui.Separator();
+                                ImGui.Checkbox("aimbot", ref G.settings.aimbot);
+                                ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
+                                ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
+                                ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
+                                ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
+                                ImGui.SliderFloat("aimbot smoothing amount", ref G.settings.aimbotsmoothing, 1.0f, 50.0f);
+                                ImGui.SliderFloat("aimbot fov", ref G.settings.aimbotfov, 0.0f, 180.0f);
+                                ImGui.EndTabItem();
+                            }
+                            if (ImGui.BeginTabItem("Visuals"))
+                            {
+                                ImGui.Checkbox("glowESP", ref G.settings.glow);
+                                ImGui.Checkbox("fullbloom (fake chams)", ref G.settings.fullbloom);
+                                ImGui.ColorEdit4("glow color", ref G.settings.glowcolor);
+                                ImGui.Separator();
+                                ImGui.Checkbox("radarESP", ref G.settings.radar);
+                                ImGui.Separator();
+                                ImGui.Checkbox("chams", ref G.settings.chams);
+                                ImGui.ColorEdit4("chams color", ref G.settings.chamscolor);
+                                ImGui.Separator();
+                                ImGui.Checkbox("hand chams", ref G.settings.colorhands);
+                                ImGui.ColorEdit4("hand chams color", ref G.settings.handcolor);
+                                ImGui.Separator();
+                                ImGui.Checkbox("viewmodel changer", ref G.settings.viewmodelchanger);
+                                ImGui.SliderInt("viewmodel fov", ref G.settings.viewmodelfov, 0, 150);
+                                ImGui.SliderInt("viewmodel x", ref G.settings.viewmodelx, -50, 50);
+                                ImGui.SliderInt("viewmodel y", ref G.settings.viewmodely, -50, 50);
+                                ImGui.SliderInt("viewmodel z", ref G.settings.viewmodelz, -50, 50);
+                                ImGui.EndTabItem();
+                            }
+                            if (ImGui.BeginTabItem("Misc"))
+                            {
+                                ImGui.Checkbox("bunnyhop", ref G.settings.bunnyhop);
+                                ImGui.Separator();
+                                ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
+                                ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
+                                ImGui.Separator();
+                                ImGui.Checkbox("model changer", ref G.settings.modelchanger);
+                                ImGui.Combo("model", ref G.settings.model, models.indexArr, models.indexArr.Length);
+                                ImGui.Separator();
+                                ImGui.Checkbox("perspective changer", ref G.settings.perspectivechanger);
+                                ImGui.SliderInt("perspective", ref G.settings.observermode, 0, 5);
+                                ImGui.Separator();
+                                ImGui.Checkbox("spectator list", ref G.settings.speclist);
+                                ImGui.Separator();
+                                ImGui.Checkbox("watermark", ref G.settings.watermark);
+                                ImGui.Separator();
+                                ImGui.Checkbox("reduce flash", ref G.settings.flashchanger);
+                                ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
+                                ImGui.Separator();
+                                ImGui.Checkbox("chat spammer", ref G.settings.spammer);
+                                ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
+                                ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
+                                ImGui.NewLine();
+                                ImGui.Checkbox("hitsounds", ref G.settings.hitsounds);
+                                ImGui.Combo("sound", ref G.settings.hitsound, hits.soundsArr, hits.soundsArr.Length);
+                                ImGui.EndTabItem();
+                            }
+                            if (ImGui.BeginTabItem("Skins"))
+                            {
+                                ImGui.Checkbox("knife changer", ref G.settings.knifechanger);
+                                ImGui.Combo("knife", ref G.settings.knife, weapons.knifeArr, weapons.knifeArr.Length);
+                                ImGui.EndTabItem();
+                            }
+                            if (ImGui.BeginTabItem("Config"))
+                            {
+                                                        ImGui.Separator();
                     ImGui.InputText("config name", ref configname, 20);
                     ImGui.Text(configname);
                     if (ImGui.Button("Save"))
                         G.settings.save(configname);
                     if (ImGui.Button("Load"))
                         G.settings.load(configname);
+                            }
+                            ImGui.EndTabBar();
+                        }
+                        ImGui.Separator();
+                        ImGui.TreePop();
+                    }
 
-                    ImGui.End();
-
-                    // kurisu pic
-                    ImGui.Begin("");
-                    if (File.Exists("image.png"))
-                        ImGui.Image(Overlay.AddOrGetImagePointer("image.png"), new Vector2(120.5f, 329.5f));
-
-                    ImGui.End();
                 }
 
-                // misc window
-                if (showmisc && showall)
-                {
-                    ImGui.Begin("misc.", ImGuiWindowFlags.AlwaysAutoResize);
-                    ImGui.Checkbox("bunnyhop", ref G.settings.bunnyhop);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
-                    ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("model changer", ref G.settings.modelchanger);
-                    ImGui.Combo("model", ref G.settings.model, models.indexArr, models.indexArr.Length);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("perspective changer", ref G.settings.perspectivechanger);
-                    ImGui.SliderInt("perspective", ref G.settings.observermode, 0, 5);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("spectator list", ref G.settings.speclist);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("watermark", ref G.settings.watermark);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("reduce flash", ref G.settings.flashchanger);
-                    ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("chat spammer", ref G.settings.spammer);
-                    ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
-                    ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("hitsounds", ref G.settings.hitsounds);
-                    ImGui.Combo("sound", ref G.settings.hitsound, hits.soundsArr, hits.soundsArr.Length);
-                    ImGui.End();
-                }
-                // shooty window
-                if (showshoot && showall)
-                {
-                    ImGui.Begin("pew pew", ImGuiWindowFlags.AlwaysAutoResize);
-                    ImGui.Checkbox("triggerbot", ref G.settings.triggerbot);
-                    ImGui.Combo("triggerbot key", ref G.settings.triggerkey, winapi.vkeyArr, winapi.vkeyArr.Length);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("recoil control", ref G.settings.rcs);
-                    ImGui.Checkbox("ignore first shot", ref G.settings.rcsafter);
-                    ImGui.SliderFloat("rcs amount X", ref G.settings.rcsintensityx, 0, 1);
-                    ImGui.SliderFloat("rcs amount Y", ref G.settings.rcsintensityy, 0, 1);
-                    ImGui.Checkbox("rcs smoothing", ref G.settings.rcssmoothing);
-                    ImGui.SliderFloat("smoothing amount", ref G.settings.rcsmoothingintensity, 1.0f, 5.0f);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("aimbot", ref G.settings.aimbot);
-                    ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
-                    ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
-                    ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
-                    ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
-                    ImGui.SliderFloat("aimbot smoothing amount", ref G.settings.aimbotsmoothing, 1.0f, 50.0f);
-                    ImGui.SliderFloat("aimbot fov", ref G.settings.aimbotfov, 0.0f, 180.0f);
-                    ImGui.End();
-                }
-                // visuals window
-                if (showvisuals && showall)
-                {
-                    ImGui.Begin("visuals", ImGuiWindowFlags.AlwaysAutoResize);
-                    ImGui.Checkbox("glowESP", ref G.settings.glow);
-                    ImGui.Checkbox("fullbloom (fake chams)", ref G.settings.fullbloom);
-                    ImGui.ColorEdit4("glow color", ref G.settings.glowcolor);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("radarESP", ref G.settings.radar);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("chams", ref G.settings.chams);
-                    ImGui.ColorEdit4("chams color", ref G.settings.chamscolor);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("hand chams", ref G.settings.colorhands);
-                    ImGui.ColorEdit4("hand chams color", ref G.settings.handcolor);
-                    ImGui.NewLine();
-                    ImGui.Checkbox("viewmodel changer", ref G.settings.viewmodelchanger);
-                    ImGui.SliderInt("viewmodel fov", ref G.settings.viewmodelfov, 0, 150);
-                    ImGui.SliderInt("viewmodel x", ref G.settings.viewmodelx, -50, 50);
-                    ImGui.SliderInt("viewmodel y", ref G.settings.viewmodely, -50, 50);
-                    ImGui.SliderInt("viewmodel z", ref G.settings.viewmodelz, -50, 50);
-                    ImGui.Checkbox("2gunz", ref G.settings.flipviewmodel);
-                    ImGui.End();
-                }
                 // spec list
                 if (G.settings.speclist)
                 {
@@ -220,14 +236,7 @@ namespace DriverProgram
                     ImGui.End();
                 }
                 // skins window
-                if (showskins && showall)
-                {
-                    ImGui.Begin("knife changer", ImGuiWindowFlags.AlwaysAutoResize);
-                    ImGui.Checkbox("knife changer", ref G.settings.knifechanger);
-                    ImGui.Combo("knife", ref G.settings.knife, weapons.knifeArr,weapons.knifeArr.Length);
-                    ImGui.End();
-                }
-                {
+                /*{
                     bool nigga = true;
                     ImGui.SetNextWindowContentSize(ImGui.GetIO().DisplaySize);
                     ImGui.SetNextWindowPos(new Vector2(0, 0));
@@ -244,9 +253,9 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize |
                         ImGuiWindowFlags.NoTitleBar);
                     var windowPtr = ImGui.GetWindowDrawList();
-                    windowPtr.AddText(new Vector2(randomGen.Next(10, 15), randomGen.Next(10, 15)), (uint)(((randomGen.Next(1, 255) << 24) | (randomGen.Next(1, 255) << 16) | (randomGen.Next(1, 255) << 8) | 255) & 0xffffffffL), "kurisuhook");
+                    windowPtr.AddText(new Vector2(10, 10), (uint)(((255 << 24) | (255 << 16) | (255 << 8) | 255) & 0xffffffffL), "kurisuhook");
                     ImGui.End();
-                }
+                }*/
 
                 if (G.settings.fovchanger)
                 {
@@ -291,11 +300,6 @@ namespace DriverProgram
                 if (G.settings.flashchanger)
                 {
                     flash.run();
-                }
-
-                if (G.settings.hitsounds)
-                {
-                    hits.run();
                 }
 
                 if (count % 200 == 0)
@@ -343,6 +347,18 @@ namespace DriverProgram
             spammerthread.Priority = ThreadPriority.Highest;
             spammerthread.IsBackground = true;
             spammerthread.Start();
+        }
+        private static IEnumerator<Wait> UpdateOverlaySample2()
+        {
+            while (true)
+            {
+                yield return new Wait(1);
+                for (int i = 0; i < circleCenters.Length; i++)
+                {
+                    circleCenters[i].X = randomGen.Next(0, 2560);
+                    circleCenters[i].Y = randomGen.Next(0, 1440);
+                }
+            }
         }
     }
 }
