@@ -288,8 +288,8 @@ namespace recode.sdk
 		{
 			get
 			{
-				Vector3 vel = Memory.read<Vector3>(this.address + hazedumper.netvars.m_vecVelocity);
-				return (vel.X + vel.Y + vel.Z);
+				Vec3 vel = Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
+				return (vel.x + vel.y + vel.z);
 			}
 		}
 		public bool onGround
