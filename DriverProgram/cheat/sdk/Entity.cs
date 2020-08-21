@@ -43,6 +43,13 @@ namespace recode.sdk
 				return Memory.read<Int32>(this.address + hazedumper.netvars.m_iTeamNum);
 			}
 		}
+		public int kills
+		{
+			get
+			{
+				return Memory.read<Int32>(this.address + offsets.m_iNumRoundKills);
+			}
+		}
 		public int flags
 		{
 			get
@@ -290,6 +297,13 @@ namespace recode.sdk
 			{
 				Vec3 vel = Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
 				return (vel.x + vel.y + vel.z);
+			}
+		}
+		public Vec3 velocityvector
+		{
+			get
+			{
+				return Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
 			}
 		}
 		public bool onGround

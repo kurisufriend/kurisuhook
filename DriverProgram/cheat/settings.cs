@@ -12,6 +12,7 @@ namespace recode
 	{
 		// misc
 		public bool bunnyhop;
+		public bool strafer;
 		public bool fovchanger;
 		public int fov;
 		public bool modelchanger;
@@ -23,6 +24,8 @@ namespace recode
 		public bool flashchanger;
 		public float maxflash;
 		public bool spammer;
+		public bool themespammer;
+		public Int32 theme;
 		public string spamstring = "";
 		public int spamdelay = 1;
 		public bool hitsounds;

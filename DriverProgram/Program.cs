@@ -160,6 +160,8 @@ namespace DriverProgram
                     ImGui.SliderFloat("strength", ref G.settings.maxflash, 0f, 255f);
                     ImGui.NewLine();
                     ImGui.Checkbox("chat spammer", ref G.settings.spammer);
+                    ImGui.Checkbox("use theme", ref G.settings.themespammer);
+                    ImGui.Combo("theme", ref G.settings.theme, spammer.themes, spammer.themes.Length);
                     ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
                     ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
                     ImGui.NewLine();
