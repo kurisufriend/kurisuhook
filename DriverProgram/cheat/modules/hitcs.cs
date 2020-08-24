@@ -28,6 +28,8 @@ namespace recode.modules
 				player.Play();
 				hitcount = G.player.totalhits;
 			}
+			if (G.player.totalhits == 0)
+				hitcount = 0;
 		}
 	}
 }
