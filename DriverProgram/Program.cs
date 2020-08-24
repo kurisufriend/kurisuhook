@@ -12,6 +12,7 @@
 |     ||     ||  |  |  |  |       |  |   |  _  |/  \ |  |  |  |   [_      |     Y |  | |     |/  \ |
 |     |l     !|  |  |  |  |       |  |   |  |  |\    |  |  |  |     T     |  .  | j  l |     |\    |
 l_____j \___/ l__j__j  l__j       l__j   l__j__j \___j  l__j  l_____j     l__j\_j|____jl_____j \___j
+amendment - sometimes paste kids
 */
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,9 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("hitsounds", ref G.settings.hitsounds);
                     ImGui.Combo("sound", ref G.settings.hitsound, hits.soundsArr, hits.soundsArr.Length);
+                    ImGui.NewLine();
+                    ImGui.Checkbox("skybox changer", ref G.settings.skychanger);
+                    ImGui.Combo("skybox", ref G.settings.sky, sky.skyArr, sky.skyArr.Length);
                     ImGui.End();
                 }
                 // shooty window
@@ -217,6 +221,7 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("crosshair", ref G.settings.crosshair);
                     ImGui.Checkbox("recoil crosshair", ref G.settings.recoilcrosshair);
+
                     ImGui.End();
                 }
                 // spec list
@@ -323,6 +328,7 @@ namespace DriverProgram
                     hits.run();
                 }
 
+
                 if (count % 200 == 0)
                 {
                     G.player = new LocalPlayer(utils.getLocalPlayer());
@@ -368,6 +374,11 @@ namespace DriverProgram
             spammerthread.Priority = ThreadPriority.Highest;
             spammerthread.IsBackground = true;
             spammerthread.Start();
+            
+            Thread skychangerthread = new Thread(new ThreadStart(sky.run));
+            skychangerthread.Priority = ThreadPriority.Highest;
+            skychangerthread.IsBackground = true;
+            skychangerthread.Start();
         }
     }
 }

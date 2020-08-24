@@ -30,6 +30,8 @@ namespace recode
 		public int spamdelay = 1;
 		public bool hitsounds;
 		public Int32 hitsound;
+		public bool skychanger;
+		public Int32 sky;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;

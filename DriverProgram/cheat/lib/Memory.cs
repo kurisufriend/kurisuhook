@@ -193,6 +193,10 @@ namespace recode.lib
 
             MemoryAPI.WriteProcessMemory(handle, (IntPtr)address, buffer, (uint)sizeRead, out _);
         }
+        public static void writeBytes(Int32 address, byte[] value)
+        {
+            MemoryAPI.WriteProcessMemory(handle, (IntPtr)address, value, (uint)value.Length, out _);
+        }
         public static void close()
         {
             MemoryAPI.CloseHandle(handle);
