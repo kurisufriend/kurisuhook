@@ -35,6 +35,7 @@ using recode.sdk;
 using Vulkan;
 using Vulkan.Xlib;
 using System.ComponentModel;
+using SharpDX.Text;
 
 namespace DriverProgram
 {
@@ -143,6 +144,7 @@ namespace DriverProgram
                 {
                     ImGui.Begin("misc.", ImGuiWindowFlags.AlwaysAutoResize);
                     ImGui.Checkbox("bunnyhop", ref G.settings.bunnyhop);
+                    ImGui.Checkbox("autostrafer", ref G.settings.strafer);
                     ImGui.NewLine();
                     ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
                     ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
@@ -231,7 +233,10 @@ namespace DriverProgram
                     foreach (Entity ent in utils.getEntityList())
                     {
                         if (ent.spectating == G.player.getaddress())
-                            ImGui.Text(ent.getaddress().ToString());
+                        {
+                            var info = utils.getPlayerInfo(ent.id);
+                            ImGui.Text(Encoding.UTF8.GetString(info.m_szPlayerName));
+                        }
                     }
                     ImGui.Text("                   ");
                     ImGui.End();
@@ -379,6 +384,11 @@ namespace DriverProgram
             skychangerthread.Priority = ThreadPriority.Highest;
             skychangerthread.IsBackground = true;
             skychangerthread.Start();
+            
+            Thread strafethread = new Thread(new ThreadStart(strafer.run));
+            strafethread.Priority = ThreadPriority.Highest;
+            strafethread.IsBackground = true;
+            strafethread.Start();
         }
     }
 }

@@ -58,6 +58,16 @@ namespace recode
 			}
 			return best;
 		}
+		public static player_info_t getPlayerInfo(int i)
+		{
+			int pInfo = Memory.read<int>(engine.clientstate + hazedumper.signatures.dwClientState_PlayerInfo);
+			pInfo = Memory.read<int>(pInfo + 0x40);
+			pInfo = Memory.read<int>(pInfo + 0xC);
+			pInfo = Memory.read<int>(pInfo + 0x28 + (i) * 0x34);
+			player_info_t info = Memory.read<player_info_t>(pInfo);
+
+			return info;
+		}
 		public static Vector4 ColorToVector4(Color color)
 		{
 			return new Vector4(
