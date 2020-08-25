@@ -7,7 +7,7 @@ using recode.sdk;
 
 namespace recode.modules
 {
-    public static class strafer
+    public static class strafer // pasted garbage
     {
         public static bool strafe = false;
         public static void run()

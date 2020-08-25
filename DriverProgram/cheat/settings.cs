@@ -65,6 +65,7 @@ namespace recode
 		public bool flipviewmodel;
 		public bool crosshair;
 		public bool recoilcrosshair;
+		public bool esp;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;
