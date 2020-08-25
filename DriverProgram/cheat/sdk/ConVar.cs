@@ -11,10 +11,13 @@ using System.IO;
 using recode;
 using recode.lib;
 using recode.sdk;
+using System.Reflection;
+using ImGuiNET;
+using Vulkan;
 
 namespace recode.sdk
 {
-    public class ConVar
+    public unsafe class ConVar
     {
         public int pThis;
         public ConVar(int Pointer)
@@ -40,7 +43,48 @@ namespace recode.sdk
             }
             return v2 | (v3 << 8);
         }
+        public void SetValue(float value)
+        {
+            var temp = *(int*)&value;
+            var temp2 = (int)(temp ^ pThis);
+            Memory.write<float>(pThis + 0x2C, *(float*)&temp2);
+        }
+        public int GetFlags()
+        {
+            return Memory.read<int>(pThis + 0x14);
+        }
+        public void SetFlags(int value)
+        {
+            Memory.write<int>(pThis + 0x14, value);
+        }
+        public void SetValue(int value)
+        {
+            Memory.write<int>(pThis + 0x30, value ^ pThis);
+        }
+        public int GetInt()
+        {
+            int xor_value = Memory.read<int>(pThis + 0x30);
 
+            xor_value ^= (int)pThis;
+
+            return xor_value;
+        }
+        public float GetFloat()
+        {
+            int xor_value = Memory.read<int>(pThis + 0x2C);
+
+            xor_value ^= pThis;
+
+            return *(float*)&xor_value;
+        }
+        private static uint CalcXorWithValue(int cvarOffset)
+        {
+            return BitConverter.ToUInt32(BitConverter.GetBytes(Memory.read<int>(G.client + cvarOffset) - 0x2C), 0);
+        }
+        public bool GetBool()
+        {
+            return GetInt() != 0;
+        }
         public void ClearCallbacks()
         {
             Memory.write<int>(pThis + 0x44 + 0xC, 0);
@@ -68,7 +112,5 @@ namespace recode.sdk
             }
             return (int)IntPtr.Zero;
         }
-
-
     }
 }

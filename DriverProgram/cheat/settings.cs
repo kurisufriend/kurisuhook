@@ -12,6 +12,7 @@ namespace recode
 	{
 		// misc
 		public bool bunnyhop;
+		public bool strafer;
 		public bool fovchanger;
 		public int fov;
 		public bool modelchanger;
@@ -23,8 +24,14 @@ namespace recode
 		public bool flashchanger;
 		public float maxflash;
 		public bool spammer;
+		public bool themespammer;
+		public Int32 theme;
 		public string spamstring = "";
 		public int spamdelay = 1;
+		public bool hitsounds;
+		public Int32 hitsound;
+		public bool skychanger;
+		public Int32 sky;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -55,6 +62,10 @@ namespace recode
 		public int viewmodelx;
 		public int viewmodely;
 		public int viewmodelz;
+		public bool flipviewmodel;
+		public bool crosshair;
+		public bool recoilcrosshair;
+		public bool esp;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;

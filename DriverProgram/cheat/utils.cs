@@ -7,6 +7,7 @@ using System.Text;
 using recode.lib;
 using recode.sdk;
 using System.Runtime.Serialization.Formatters;
+using recode.modules;
 
 namespace recode
 {
@@ -57,6 +58,44 @@ namespace recode
 				}
 			}
 			return best;
+		}
+		public static float[] WorldToScreen(Matrix matrix, Entity entity, int width, int height, bool foot = true)
+		{
+			float zPos = entity.position.z;
+
+			//multiply vector against matrix
+			float screenX = (matrix.m11 * entity.position.x) + (matrix.m21 * entity.position.y) + (matrix.m31 * zPos) + matrix.m41;
+			float screenY = (matrix.m12 * entity.position.x) + (matrix.m22 * entity.position.y) + (matrix.m32 * zPos) + matrix.m42;
+			float screenW = (matrix.m14 * entity.position.x) + (matrix.m24 * entity.position.y) + (matrix.m34 * zPos) + matrix.m44;
+
+
+			//camera position (eye level/middle of screen)
+			float camX = width / 2f;
+			float camY = height / 2f;
+
+			//convert to homogeneous position
+			float x = camX + (camX * screenX / screenW);
+			float y = camY - (camY * screenY / screenW);
+			float[] screenPos = { x, y };
+
+			//check it is in the bounds to draw
+			if (screenW > 0.001f  //not behind us
+				&& 0 + x > 0 && 0 + x < 1920 //not off the left or right of the window
+				&& 0 + y > 0 && 0 + y < 1080) //not off the top of bottom of the window
+			{
+				return screenPos;
+			}
+			return null;
+		}
+		public static player_info_t getPlayerInfo(int i)
+		{
+			int pInfo = Memory.read<int>(engine.clientstate + hazedumper.signatures.dwClientState_PlayerInfo);
+			pInfo = Memory.read<int>(pInfo + 0x40);
+			pInfo = Memory.read<int>(pInfo + 0xC);
+			pInfo = Memory.read<int>(pInfo + 0x28 + (i) * 0x34);
+			player_info_t info = Memory.read<player_info_t>(pInfo);
+
+			return info;
 		}
 		public static Vector4 ColorToVector4(Color color)
 		{

@@ -43,6 +43,13 @@ namespace recode.sdk
 				return Memory.read<Int32>(this.address + hazedumper.netvars.m_iTeamNum);
 			}
 		}
+		public int kills
+		{
+			get
+			{
+				return Memory.read<Int32>(this.address + offsets.m_iNumRoundKills);
+			}
+		}
 		public int flags
 		{
 			get
@@ -225,6 +232,17 @@ namespace recode.sdk
 				Memory.write<Vec3>(this.address + hazedumper.netvars.m_aimPunchAngle, value);
 			}
 		}
+		public Vec3 viewpunch
+		{
+			get
+			{
+				return Memory.read<Vec3>(this.address + hazedumper.netvars.m_viewPunchAngle);
+			}
+			set
+			{
+				Memory.write<Vec3>(this.address + hazedumper.netvars.m_viewPunchAngle, value);
+			}
+		}
 		public Vec3 viewangles
 		{
 			get
@@ -277,8 +295,15 @@ namespace recode.sdk
 		{
 			get
 			{
-				Vector3 vel = Memory.read<Vector3>(this.address + hazedumper.netvars.m_vecVelocity);
-				return (vel.X + vel.Y + vel.Z);
+				Vec3 vel = Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
+				return (vel.x + vel.y + vel.z);
+			}
+		}
+		public Vec3 velocityvector
+		{
+			get
+			{
+				return Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
 			}
 		}
 		public bool onGround
@@ -286,6 +311,13 @@ namespace recode.sdk
 			get
 			{
 				return (this.flags == 263 || this.flags == 257) ? true : false;
+			}
+		}
+		public int totalhits
+		{
+			get
+			{
+				return Memory.read<int>(this.address + offsets.m_totalHitsOnServer);
 			}
 		}
 		public Vec3 getbonepos(int BoneID)
