@@ -179,6 +179,9 @@ namespace DriverProgram
                                 ImGui.Checkbox("chat spammer", ref G.settings.spammer);
                                 ImGui.InputText("string to spam", ref G.settings.spamstring, 60);
                                 ImGui.SliderInt("spam delay", ref G.settings.spamdelay, 2, 10);
+                                ImGui.NewLine();
+                                ImGui.Checkbox("hitsounds", ref G.settings.hitsounds);
+                                ImGui.Combo("sound", ref G.settings.hitsound, hits.soundsArr, hits.soundsArr.Length);
                                 ImGui.EndTabItem();
                             }
                             if (ImGui.BeginTabItem("Skins"))
