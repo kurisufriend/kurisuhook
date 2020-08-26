@@ -16,5 +16,16 @@ namespace recode
 				return Memory.read<Int32>(G.engine + hazedumper.signatures.dwClientState);
 			}
 		}
+		public static bool sendpackets
+		{
+			get
+			{
+				return Memory.read<bool>(G.engine + hazedumper.signatures.dwbSendPackets);
+			}
+			set
+			{
+				Memory.write<bool>(G.engine + hazedumper.signatures.dwbSendPackets, value);
+			}
+		}
 	}
 }

@@ -192,6 +192,7 @@ namespace DriverProgram
                     ImGui.Checkbox("aimbot", ref G.settings.aimbot);
                     ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
                     ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
+                    ImGui.Checkbox("nearest bone (override)", ref G.settings.nearest);
                     ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
                     ImGui.Checkbox("factor recoil", ref G.settings.aimbotrcs);
                     ImGui.SliderFloat("aimbot smoothing amount", ref G.settings.aimbotsmoothing, 1.0f, 50.0f);
@@ -223,7 +224,8 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("crosshair", ref G.settings.crosshair);
                     ImGui.Checkbox("recoil crosshair", ref G.settings.recoilcrosshair);
-
+                    ImGui.NewLine();
+                    ImGui.Checkbox("grenade prediction", ref G.settings.grenade);
                     ImGui.End();
                 }
                 // spec list
@@ -389,6 +391,11 @@ namespace DriverProgram
             strafethread.Priority = ThreadPriority.Highest;
             strafethread.IsBackground = true;
             strafethread.Start();
+
+            Thread grenadethread = new Thread(new ThreadStart(grenade.run));
+            grenadethread.Priority = ThreadPriority.Highest;
+            grenadethread.IsBackground = true;
+            grenadethread.Start();
         }
     }
 }

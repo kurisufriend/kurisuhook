@@ -59,6 +59,21 @@ namespace recode
 			}
 			return best;
 		}
+		public static int getBestAimpoint(Entity ent)
+		{
+			float best = float.MaxValue;
+			int bestBone = 8;
+			foreach (int bone in models.bonesArrVals)
+			{
+				float distance = utils.Vec3Distance(G.player.viewangles, utils.NormalizedAngle(utils.RCS(utils.CalcAngle(G.player.eyeposition, ent.getbonepos(bone)))));
+				if (distance < best)
+				{
+					best = distance;
+					bestBone = bone;
+				}
+			}
+			return bestBone;
+		}
 		public static float[] WorldToScreen(Matrix matrix, Entity entity, int width, int height, bool foot = true)
 		{
 			float zPos = entity.position.z;
@@ -110,28 +125,19 @@ namespace recode
 			float hypotenuse = (float)Math.Sqrt((dst.x - src.x) * (dst.x - src.x) + (dst.y - src.y) * (dst.y - src.y) + (dst.z - src.z) * (dst.z - src.z));
 			return hypotenuse;
 		}
-		public static Vec3 LinearInterp(Vec3 src, Vec3 dst, float factor)
+		public static Vec3 CubicInterp(Vec3 src, Vec3 dst, float factor)
 		{
-			float x1 = src.x;
-			float x2 = dst.x;
-			float y1 = src.y;
-			float y2 = dst.y;
-
-			if (src.Equals(dst)) { return src; };
-
-			if (x1 < x2)
-				src.x++;
-			if (x1 > x2)
-				src.x--;
-			if (y1 < y2)
-				src.y++;
-			if (y1 > y2)
-				src.y--;
-			return src;
+			Vec3 delta = dst - src;
+			delta.x = (float)Math.Pow((double)delta.x, 2);
+			delta.y = (float)Math.Pow((double)delta.y, 2);
+			delta.z = (float)Math.Pow((double)delta.z, 2);
+			return src + delta;
 		}
 		public static Vec3 NonlinearInterp(Vec3 src, Vec3 dst, float factor)
 		{
-			return src + (dst - src) / factor;
+			Vec3 delta = dst - src;
+			delta /= factor;
+			return src + delta;
 		}
 		public static Vec3 RCS(Vec3 src, float factor = 1f)
 		{

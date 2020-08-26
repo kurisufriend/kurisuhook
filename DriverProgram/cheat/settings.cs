@@ -32,6 +32,8 @@ namespace recode
 		public Int32 hitsound;
 		public bool skychanger;
 		public Int32 sky;
+		public bool fakelag;
+		public int lagamount = 1;
 		// shoot
 		public bool triggerbot;
 		public Int32 triggerkey;
@@ -48,6 +50,7 @@ namespace recode
 		public Int32 aimkey;
 		public float aimbotfov;
 		public Int32 aimbone;
+		public bool nearest;
 		// visuals
 		public bool glow;
 		public bool fullbloom;
@@ -66,6 +69,8 @@ namespace recode
 		public bool crosshair;
 		public bool recoilcrosshair;
 		public bool esp;
+		public bool grenade;
+		public bool tracers;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;
