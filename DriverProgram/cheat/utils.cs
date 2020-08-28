@@ -8,6 +8,7 @@ using recode.lib;
 using recode.sdk;
 using System.Runtime.Serialization.Formatters;
 using recode.modules;
+using kurisuhook.cheat.sdk;
 
 namespace recode
 {
@@ -111,6 +112,24 @@ namespace recode
 			player_info_t info = Memory.read<player_info_t>(pInfo);
 
 			return info;
+		}
+		public static void cmdAim(Vec3 angle, bool shoot = false)
+		{
+			Input_t input = Memory.read<Input_t>(G.client + hazedumper.signatures.dwInput);
+			int desiredCMD = Memory.read<int>(engine.clientstate + hazedumper.signatures.clientstate_last_outgoing_command);
+			Int32 incomingCMD = input.m_pCommands + (desiredCMD % 150) * 0x64;
+			Int32 currentCMD = input.m_pCommands + ((desiredCMD - 1) % 150) * 0x64;
+			Int32 verifiedCMD = input.m_pVerifiedCommands + ((desiredCMD - 1) % 150) * 0x68;
+			int cmdNumber = 0;
+			while (cmdNumber < desiredCMD)
+				cmdNumber = Memory.read<int>(incomingCMD + 0x4);
+			UserCmd_t cmd = Memory.read<UserCmd_t>(currentCMD);
+			cmd.m_vecViewAngles = angle;
+			if (shoot)
+				G.player.shoot();
+			Memory.write<UserCmd_t>(currentCMD, cmd);
+			Memory.write<UserCmd_t>(verifiedCMD, cmd);
+
 		}
 		public static Vector4 ColorToVector4(Color color)
 		{
