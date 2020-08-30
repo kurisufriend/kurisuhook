@@ -9,6 +9,7 @@ using recode.sdk;
 using System.Runtime.Serialization.Formatters;
 using recode.modules;
 using kurisuhook.cheat.sdk;
+using ImGuiNET;
 
 namespace recode
 {
@@ -28,10 +29,10 @@ namespace recode
 		{
 			return Memory.read<Int32>(G.client + hazedumper.signatures.dwLocalPlayer);
 		}
-		public static Entity[] getEntityList()
+		public static Entity[] getEntityList(int size = 64)
 		{
 			List<Entity> list = new List<Entity>();
-			for (int i = 0; i < 64; i++)
+			for (int i = 0; i < size; i++)
 			{
 				int obj = Memory.read<Int32>(G.client + hazedumper.signatures.dwEntityList + i * 0x10);	
 				if (obj != 0)
@@ -50,6 +51,25 @@ namespace recode
 				if (ent.isenemy && ent.health > 0 && !ent.dormant)
 				{
 					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.getbonepos((int)models.bonesArrVals.GetValue(G.settings.aimbone)))));
+					float curdist = utils.Vec3Distance(G.player.viewangles, ang);
+					if (curdist < distance)
+					{
+						distance = curdist;
+						best = ent;
+					}
+				}
+			}
+			return best;
+		}
+		public static Entity getClass(int id)
+		{
+			float distance = Int32.MaxValue;
+			Entity best = new Entity(0);
+			foreach (Entity ent in utils.getEntityList(1024))
+			{
+				if (utils.getClassId(ent) == id && !ent.dormant)
+				{
+					Vec3 ang = NormalizedAngle(RCS(CalcAngle(G.player.eyeposition, ent.position)));
 					float curdist = utils.Vec3Distance(G.player.viewangles, ang);
 					if (curdist < distance)
 					{
@@ -112,6 +132,13 @@ namespace recode
 			player_info_t info = Memory.read<player_info_t>(pInfo);
 
 			return info;
+		}
+		public static int getClassId(Entity entity)
+		{
+			Int32 clientNetworkable = Memory.read<Int32>(entity.getaddress() + 0x8);
+			Int32 getClientClassFn = Memory.read<Int32>(clientNetworkable + 2 * 0x4);
+			Int32 entityClientClass = Memory.read<Int32>(getClientClassFn + 1);
+			return Memory.read<int>(entityClientClass + 20);
 		}
 		public static void cmdAim(Vec3 angle, bool shoot = false)
 		{

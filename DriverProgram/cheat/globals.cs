@@ -15,5 +15,6 @@ namespace recode
 		public static Int32 normalhands; // used to reset nohands
 		public static settings settings;
 		public static Entity[] entitylist;
+		public static Entity[] bigentitylist;
 	}
 }

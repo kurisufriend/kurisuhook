@@ -51,6 +51,8 @@ namespace recode
 		public float aimbotfov;
 		public Int32 aimbone;
 		public bool nearest;
+		public bool awpbot;
+		public Int32 funnytarget;
 		// visuals
 		public bool glow;
 		public bool fullbloom;
@@ -70,7 +72,10 @@ namespace recode
 		public bool recoilcrosshair;
 		public bool esp;
 		public bool grenade;
+		public bool grenadetrace;
 		public bool tracers;
+		public bool moonman;
+		public int powerlevel;
 		// purple people eater
 		public bool knifechanger;
 		public Int32 knife;

@@ -66,6 +66,7 @@ namespace DriverProgram
             G.player = new LocalPlayer(playercache);
             G.settings = new settings();
             G.entitylist = utils.getEntityList();
+            G.bigentitylist = utils.getEntityList(1024);
 
             CoroutineHandler.Start(SubmitRenderLogic());
             Overlay.RunInfiniteLoop();
@@ -226,6 +227,7 @@ namespace DriverProgram
                     ImGui.Checkbox("recoil crosshair", ref G.settings.recoilcrosshair);
                     ImGui.NewLine();
                     ImGui.Checkbox("grenade prediction", ref G.settings.grenade);
+                    ImGui.Checkbox("grenade tracers", ref G.settings.grenadetrace);
                     ImGui.End();
                 }
                 // spec list
@@ -335,16 +337,6 @@ namespace DriverProgram
                     hits.run();
                 }
 
-
-                if (count % 200 == 0)
-                {
-                    G.player = new LocalPlayer(utils.getLocalPlayer());
-                    G.playeraddress = utils.getLocalPlayer();
-                    G.entitylist = utils.getEntityList();
-                    if (G.player.modelindex != 0)
-                        G.normalhands = G.player.modelindex;
-                }
-
                 ImGui.End();
                 //Thread.Sleep(1);
                 count++;
@@ -391,11 +383,16 @@ namespace DriverProgram
             strafethread.Priority = ThreadPriority.Highest;
             strafethread.IsBackground = true;
             strafethread.Start();
-
+            
             Thread grenadethread = new Thread(new ThreadStart(grenade.run));
             grenadethread.Priority = ThreadPriority.Highest;
             grenadethread.IsBackground = true;
             grenadethread.Start();
+
+            Thread updatethread = new Thread(new ThreadStart(update.run));
+            updatethread.Priority = ThreadPriority.Highest;
+            updatethread.IsBackground = true;
+            updatethread.Start();
         }
     }
 }
