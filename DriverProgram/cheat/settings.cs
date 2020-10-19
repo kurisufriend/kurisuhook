@@ -13,6 +13,7 @@ namespace recode
 		// misc
 		public bool bunnyhop;
 		public bool strafer;
+		public Int32 straferkey;
 		public bool fovchanger;
 		public int fov;
 		public bool modelchanger;
@@ -20,7 +21,7 @@ namespace recode
 		public bool perspectivechanger;
 		public int observermode;
 		public bool speclist;
-		public bool watermark;
+		public bool watermark = true;
 		public bool flashchanger;
 		public float maxflash;
 		public bool spammer;
@@ -53,6 +54,7 @@ namespace recode
 		public bool nearest;
 		public bool awpbot;
 		public Int32 funnytarget;
+		public bool noknifeaim;
 		// visuals
 		public bool glow;
 		public bool fullbloom;

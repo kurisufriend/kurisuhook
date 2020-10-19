@@ -8,6 +8,8 @@ using recode.sdk;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading;
 
+using static recode.sdk.weapons.knifeDefinitionIndex;
+
 namespace recode.modules
 {
 	public static class aim
@@ -19,6 +21,9 @@ namespace recode.modules
 				Thread.Sleep(1);
 				if (G.settings.aimbot)
 				{
+					var w = new Weapon(G.player.curweapon);
+					if (G.settings.noknifeaim && (w.econid == (int)WEAPON_KNIFE || w.econid == (int)WEAPON_KNIFE_T))
+						continue;
 					Entity target = utils.getTarget();
 					int nearestBone = 8;
 					if (G.settings.nearest)

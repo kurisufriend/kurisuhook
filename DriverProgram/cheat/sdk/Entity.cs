@@ -296,7 +296,7 @@ namespace recode.sdk
 			get
 			{
 				Vec3 vel = Memory.read<Vec3>(this.address + hazedumper.netvars.m_vecVelocity);
-				return (vel.x + vel.y + vel.z);
+				return Math.Max(vel.x, vel.y);
 			}
 		}
 		public Vec3 velocityvector

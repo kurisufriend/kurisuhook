@@ -16,25 +16,18 @@ amendment - sometimes paste kids
 */
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Threading;
 using ClickableTransparentOverlay;
 using Coroutine;
 using ImGuiNET;
-using Veldrid;
-using Veldrid.ImageSharp;
-using Veldrid.Sdl2;
-using Veldrid.StartupUtilities;
 using kurisuhook.cheat.modules;
+using kurisuhook.cheat.sdk;
 using recode;
 using recode.lib;
 using recode.modules;
 using recode.sdk;
-using Vulkan;
-using Vulkan.Xlib;
-using System.ComponentModel;
 using SharpDX.Text;
 
 namespace DriverProgram
@@ -103,6 +96,7 @@ namespace DriverProgram
                         ImGuiWindowFlags.NoResize);
 
                     ImGui.Text("kurisuhook" + " | " + (isdebug ? "debug" : "release") + ((configname == "") ? "" : " | ") + configname);
+                    ImGui.Text(client.glowobject.ToString("X"));
                     ImGui.End();
                 }
 
@@ -146,6 +140,7 @@ namespace DriverProgram
                     ImGui.Begin("misc.", ImGuiWindowFlags.AlwaysAutoResize);
                     ImGui.Checkbox("bunnyhop", ref G.settings.bunnyhop);
                     ImGui.Checkbox("autostrafer", ref G.settings.strafer);
+                    ImGui.Combo("autostrafer key", ref G.settings.straferkey, winapi.vkeyArr, winapi.vkeyArr.Length);
                     ImGui.NewLine();
                     ImGui.Checkbox("FOV changer", ref G.settings.fovchanger);
                     ImGui.SliderInt("fov", ref G.settings.fov, 0, 180);
@@ -192,6 +187,7 @@ namespace DriverProgram
                     ImGui.NewLine();
                     ImGui.Checkbox("aimbot", ref G.settings.aimbot);
                     ImGui.Checkbox("only visible (slight delay)", ref G.settings.aimvisible);
+                    ImGui.Checkbox("no knife aim", ref G.settings.noknifeaim);
                     ImGui.Combo("aimbot bone", ref G.settings.aimbone, models.bonesArr, models.bonesArr.Length);
                     ImGui.Checkbox("nearest bone (override)", ref G.settings.nearest);
                     ImGui.Combo("aimbot key", ref G.settings.aimkey, winapi.vkeyArr, winapi.vkeyArr.Length);
@@ -346,16 +342,19 @@ namespace DriverProgram
         {
             Thread bhopthread = new Thread(new ThreadStart(bhop.run));
             bhopthread.Priority = ThreadPriority.Highest;
+            bhopthread.Name = "bhop";
             bhopthread.IsBackground = true;
             bhopthread.Start();
 
             Thread skinthread = new Thread(new ThreadStart(knifechanger.run));
             skinthread.Priority = ThreadPriority.Highest;
+            skinthread.Name = "knifechanger";
             skinthread.IsBackground = true;
             skinthread.Start();
 
             Thread aimthread = new Thread(new ThreadStart(aim.run));
             aimthread.Priority = ThreadPriority.Highest;
+            aimthread.Name = "aimbot";
             aimthread.IsBackground = true;
             aimthread.Start();
 

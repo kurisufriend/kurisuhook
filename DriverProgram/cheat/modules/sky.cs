@@ -37,14 +37,14 @@ namespace kurisuhook.cheat.modules
 		public static string[] skyArr = Enum.GetNames(typeof(skycodes));
 		public static void run()
 		{
-			ConVar sky = new ConVar("sv_skyname");
-			sky.ClearCallbacks();
-			sky.SetFlags(sky.GetFlags() & (1 << 14));
-			sky.SetFlags(sky.GetFlags() & (1 << 13));
             while (true)
             {
                 Thread.Sleep(500);
-                if (G.settings.skychanger)
+				ConVar sky = new ConVar("sv_skyname");
+				sky.ClearCallbacks();
+				sky.SetFlags(sky.GetFlags() & (1 << 14));
+				sky.SetFlags(sky.GetFlags() & (1 << 13));
+				if (G.settings.skychanger)
                 {
 					ClientCMD.Exec("sv_skyname " + skyArr[G.settings.sky]);
                 }

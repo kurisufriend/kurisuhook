@@ -8,104 +8,56 @@ using recode.lib;
 
 namespace kurisuhook.cheat.sdk
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Input_t
-    {
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_pVftable;                   // 0x00
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bTrackIRAvailable;          // 0x04
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bMouseInitialized;          // 0x05
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bMouseActive;               // 0x06
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bJoystickAdvancedInit;      // 0x07
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
-        public int[] Unk1;                     // 0x08
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_pKeys;                      // 0x34
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-        public int[] Unk2;                    // 0x38
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bCameraInterceptingMouse;   // 0x9C
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bCameraInThirdPerson;       // 0x9D
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bCameraMovingWithMouse;     // 0x9E
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Vec3 m_vecCameraOffset;            // 0xA0
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        public bool m_bCameraDistanceMove;        // 0xAC
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_nCameraOldX;                // 0xB0
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_nCameraOldY;                // 0xB4
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_nCameraX;                   // 0xB8
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_nCameraY;                   // 0xBC
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public bool m_bCameraIsOrthographic;      // 0xC0
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Vec3 m_vecPreviousViewAngles;      // 0xC4
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Vec3 m_vecPreviousViewAnglesTilt;  // 0xD0
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public float m_flLastForwardMove;          // 0xDC
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_nClearInputState;           // 0xE0
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public int[] Unk3;                    // 0xE4
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_pCommands;                  // 0xEC
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_pVerifiedCommands;          // 0xF0
-    };
+	[StructLayout(LayoutKind.Explicit)]
+	public unsafe struct CInput
+	{
+		[FieldOffset(0)] public int pvftable;
+		[FieldOffset(12)] public byte m_fTrackIRAvailable;
+		[FieldOffset(13)] public byte m_fMouseInitialized;
+		[FieldOffset(14)] public byte m_fMouseActive;
+		[FieldOffset(15)] public byte m_fJoystickAdvancedInit;
+		[FieldOffset(60)] public void* m_pKeys;
+		[FieldOffset(172)] public byte m_fCameraInterceptingMouse;
+		[FieldOffset(173)] public byte m_fCameraInThirdPerson;
+		[FieldOffset(174)] public byte m_fCameraMovingWithMouse;
+		[FieldOffset(175)] public byte m_fCameraDistanceMove;
+		[FieldOffset(176)] public Vec3 m_vecCameraOffset;
+		[FieldOffset(188)] public int m_nCameraOldX;
+		[FieldOffset(192)] public int m_nCameraOldY;
+		[FieldOffset(196)] public int m_nCameraX;
+		[FieldOffset(200)] public int m_nCameraY;
+		[FieldOffset(204)] public byte m_CameraIsOrthographic;
+		[FieldOffset(236)] public float m_flLastForwardMove;
+		[FieldOffset(240)] public int m_nClearInputState;
+		[FieldOffset(244)] public int m_pCommands;
+		[FieldOffset(248)] public Int32 m_pVerifiedCommands;
+	}
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct UserCmd_t
-    {
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int pVft;                // 0x00
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iCmdNumber;        // 0x04
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iTickCount;        // 0x08
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Vec3 m_vecViewAngles;     // 0x0C
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Vec3 m_vecAimDirection;   // 0x18
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public float m_flForwardmove;     // 0x24
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public float m_flSidemove;        // 0x28
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public float m_flUpmove;          // 0x2C
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iButtons;          // 0x30
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public int m_bImpulse;          // 0x34
-        public int[] Pad1;
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iWeaponSelect;     // 0x38
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iWeaponSubtype;    // 0x3C
-        [MarshalAs(UnmanagedType.U1, SizeConst = 4)]
-        public int m_iRandomSeed;       // 0x40
-        [MarshalAs(UnmanagedType.U1, SizeConst = 2)]
-        public UInt16 m_siMouseDx;         // 0x44
-        [MarshalAs(UnmanagedType.U1, SizeConst = 2)]
-        public UInt16 m_siMouseDy;         // 0x46
-        [MarshalAs(UnmanagedType.U1, SizeConst = 1)]
-        bool m_bHasBeenPredicted; // 0x48
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public int[] Pad2;
-    }; // size is 100 or 0x64
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    struct VerifiedUserCmd_t
-    {
-        public UserCmd_t m_Command;
-        public UInt32 m_Crc;
-    };
+
+	public struct VerifiedUserCMD
+	{
+		public CUserCmd m_cmd;
+		public UInt32 m_crc;
+	};
+
+	[StructLayout(LayoutKind.Explicit)]
+	public unsafe struct CUserCmd
+	{
+		[FieldOffset(0x00)] public int pvftable;
+		[FieldOffset(0x04)] public int m_iCmdNumber;
+		[FieldOffset(0x08)] public int m_iTickCount;
+		[FieldOffset(0x0C)] public Vec3 m_vecViewAngles;
+		[FieldOffset(0x24)] public float m_flForwardmove;
+		[FieldOffset(0x28)] public float m_flSidemove;
+		[FieldOffset(0x2C)] public float m_flUpmove;
+		[FieldOffset(0x30)] public int m_iButtons;
+		[FieldOffset(0x34)] public char m_bImpulse;
+		[FieldOffset(0x38)] public int m_iWeaponSelect;
+		[FieldOffset(0x3C)] public int m_iWeaponSubtype;
+		[FieldOffset(0x40)] public int m_iRandomSeed;
+		[FieldOffset(0x44)] public short m_siMouseDx;
+		[FieldOffset(0x46)] public short m_siMouseDy;
+		[FieldOffset(0x48)] public byte m_bHasBeenPredicted;
+		[FieldOffset(0x4C)] public fixed byte pad[0x18];
+	}
 }

@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters;
 using recode.modules;
 using kurisuhook.cheat.sdk;
 using ImGuiNET;
+using SharpDX.Direct3D11;
 
 namespace recode
 {
@@ -41,6 +42,21 @@ namespace recode
 				}
 			}
 			return list.ToArray();
+		}
+		public static CUserCmd getUserCmd(int iIndex)
+		{
+			CInput input = Memory.read<CInput>(G.client + hazedumper.signatures.dwInput);
+			int lastCommand = Memory.read<Int32>(engine.clientstate + hazedumper.signatures.clientstate_last_outgoing_command);
+			lastCommand += 2;
+			Int32 incomingCmd = input.m_pCommands + (lastCommand % 150) * 0x64;
+			Int32 currentCmd = input.m_pCommands + ((lastCommand - 1) % 150) * 0x64;
+			Int32 verfiedCurrentCmd = input.m_pVerifiedCommands + ((lastCommand - 1) % 150) * 0x68;
+			Int32 pUserCmdList = Memory.read<Int32>(input.m_pCommands);
+			int cmdCounter = 0;
+			while (cmdCounter < lastCommand)
+				cmdCounter = Memory.read<int>(incomingCmd + 0x04);
+
+			return Memory.read<CUserCmd>(pUserCmdList + (iIndex * 0x64) + 0x4);
 		}
 		public static Entity getTarget()
 		{
@@ -139,24 +155,6 @@ namespace recode
 			Int32 getClientClassFn = Memory.read<Int32>(clientNetworkable + 2 * 0x4);
 			Int32 entityClientClass = Memory.read<Int32>(getClientClassFn + 1);
 			return Memory.read<int>(entityClientClass + 20);
-		}
-		public static void cmdAim(Vec3 angle, bool shoot = false)
-		{
-			Input_t input = Memory.read<Input_t>(G.client + hazedumper.signatures.dwInput);
-			int desiredCMD = Memory.read<int>(engine.clientstate + hazedumper.signatures.clientstate_last_outgoing_command);
-			Int32 incomingCMD = input.m_pCommands + (desiredCMD % 150) * 0x64;
-			Int32 currentCMD = input.m_pCommands + ((desiredCMD - 1) % 150) * 0x64;
-			Int32 verifiedCMD = input.m_pVerifiedCommands + ((desiredCMD - 1) % 150) * 0x68;
-			int cmdNumber = 0;
-			while (cmdNumber < desiredCMD)
-				cmdNumber = Memory.read<int>(incomingCMD + 0x4);
-			UserCmd_t cmd = Memory.read<UserCmd_t>(currentCMD);
-			cmd.m_vecViewAngles = angle;
-			if (shoot)
-				G.player.shoot();
-			Memory.write<UserCmd_t>(currentCMD, cmd);
-			Memory.write<UserCmd_t>(verifiedCMD, cmd);
-
 		}
 		public static Vector4 ColorToVector4(Color color)
 		{
